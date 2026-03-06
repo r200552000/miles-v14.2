@@ -3,30 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>TDC環哩匯X航空消費累哩工具（AI版） v14.5</title>
+  <title>TDC環哩匯X航空消費累哩工具（AI版） v14.9</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Mali:wght@500;700&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
     /* =========================
-       排版防禦系統 & 基礎變數 (v14.5 全球大滿貫版)
+       排版防禦系統 & 基礎變數 (v14.9 終極防禦版)
        ========================= */
-    .row { display: flex; flex-wrap: wrap; margin-left: -5px; margin-right: -5px; }
-    .col-5 { width: 41.666%; padding-left: 5px; padding-right: 5px; box-sizing: border-box; }
-    .col-6 { width: 50%; padding-left: 5px; padding-right: 5px; box-sizing: border-box; }
-    .col-7 { width: 58.333%; padding-left: 5px; padding-right: 5px; box-sizing: border-box; }
-    .col-12 { width: 100%; padding-left: 5px; padding-right: 5px; box-sizing: border-box; }
-    .d-flex { display: flex !important; }
-    .justify-content-between { justify-content: space-between !important; }
-    .justify-content-center { justify-content: center !important; }
-    .justify-content-evenly { justify-content: space-evenly !important; }
-    .align-items-center { align-items: center !important; }
-    .w-100 { width: 100% !important; }
-    .flex-grow-1 { flex-grow: 1 !important; }
-    .text-center { text-align: center !important; }
-    .text-end { text-align: right !important; }
-    .m-0 { margin: 0 !important; } .mb-1 { margin-bottom: 0.25rem !important; } .mb-2 { margin-bottom: 0.5rem !important; } .mb-3 { margin-bottom: 1rem !important; }
+    .tdc-row { display: flex; flex-wrap: wrap; margin-left: -5px; margin-right: -5px; }
+    .tdc-col-5 { width: 41.666%; padding-left: 5px; padding-right: 5px; box-sizing: border-box; }
+    .tdc-col-6 { width: 50%; padding-left: 5px; padding-right: 5px; box-sizing: border-box; }
+    .tdc-col-7 { width: 58.333%; padding-left: 5px; padding-right: 5px; box-sizing: border-box; }
+    .tdc-col-12 { width: 100%; padding-left: 5px; padding-right: 5px; box-sizing: border-box; }
+    .tdc-flex { display: flex !important; }
+    .tdc-justify-between { justify-content: space-between !important; }
+    .tdc-justify-center { justify-content: center !important; }
+    .tdc-justify-evenly { justify-content: space-evenly !important; }
+    .tdc-align-center { align-items: center !important; }
+    .tdc-w-100 { width: 100% !important; }
+    .tdc-grow-1 { flex-grow: 1 !important; }
+    .tdc-text-center { text-align: center !important; }
+    .tdc-text-end { text-align: right !important; }
+    .tdc-m-0 { margin: 0 !important; }
+    .tdc-mb-1 { margin-bottom: 0.25rem !important; }
+    .tdc-mb-2 { margin-bottom: 0.5rem !important; }
+    .tdc-mb-3 { margin-bottom: 1rem !important; }
     a { text-decoration: none; font-weight: bold; }
 
     :root {
@@ -51,19 +54,23 @@
     h1,h2,h3,h4,h5,h6 { font-family: var(--font-hand); font-weight: 700; color: var(--text-header); margin-top: 0; }
     .lucide { width: 1.2em; height: 1.2em; display: inline-block; vertical-align: -0.2em; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
-    /* Z-index 終極防護修復區 */
+    /* Z-index 防護區 */
     .modal { z-index: 1050; }
     #customConfirmModal, #customAlertModal, #aiReportModal, #manualAdjustModal, #guideModal, #settingsModal, #editLimitModal { z-index: 2100 !important; }
     .modal-backdrop { z-index: 1040 !important; }
     body.confirm-modal-open .modal-backdrop:last-child { z-index: 2050 !important; }
 
-    /* 通用版面與元件 */
+    /* v14.9 通用版面與元件 */
     .header { background: #ffffff; padding: 15px 20px 25px 20px; border-bottom-left-radius: 36px; border-bottom-right-radius: 36px; position: sticky; top: 0; box-shadow: var(--shadow-draw); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; height: 90px; border-bottom: 3px dashed #bae6fd; z-index: 100; box-sizing: border-box; }
     .header-icon { width: 40px; height: 40px; background: #eff6ff; border: 2px solid #bfdbfe; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.1rem; transform: rotate(-5deg); margin-right: 10px; flex-shrink: 0; }
     
-    .header-title h5 { margin: 0; font-size: 1rem; color: var(--primary-dark); line-height: 1.2; font-weight: 900; white-space: nowrap; }
-    .header-title small { color: var(--text-light); font-size: 0.75rem; font-family: var(--font-hand); }
+    .header-title { min-width: 0; flex-grow: 1; margin-right: 10px; }
+    .header-title h5 { margin: 0; font-size: 1rem; color: var(--primary-dark); line-height: 1.2; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .header-title small { color: var(--text-light); font-size: 0.75rem; font-family: var(--font-hand); white-space: nowrap; }
     
+    .header-btn-group { flex-shrink: 0; display: flex; gap: 8px; }
+    @media (max-width: 380px) { .btn-text-hide { display: none; } }
+
     /* 心跳監控燈 */
     .sync-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; cursor: pointer; transition: 0.3s; flex-shrink: 0; }
     .sync-green { background-color: #10b981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.6); animation: pulseGreen 2s infinite; }
@@ -114,21 +121,17 @@
     .btn-record-win { background: #3b82f6; color: white; border-color: #2563eb; box-shadow: 1px 1px 0 #2563eb; }
     .btn-manual-adjust { background: #fffbeb; color: #d97706; border-color: #fde68a; box-shadow: 1px 1px 0 #fde68a; }
 
-    /* 航司超連結按鈕 */
     .btn-airline-link { display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-size: 0.8rem; padding: 6px 12px; border-radius: 50px; border: 1px solid #e2e8f0; font-weight: bold; text-decoration: none; transition: 0.2s; background: #fff; color: #475569; flex: 1; box-shadow: 1px 1px 0 #e2e8f0; white-space: nowrap; }
     .link-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
     
-    /* 手動試算區的資產檢視卡片 */
     .planner-asset-status { background: #f8fafc; border-radius: 12px; padding: 12px 16px; border: 1px solid #e2e8f0; margin-top: 8px; text-align: left; transition: 0.2s; }
     .planner-asset-status:hover { background: #fff; border-color: #cbd5e1; box-shadow: 2px 2px 0 rgba(0,0,0,0.02); }
 
-    /* 倉庫與明細卡片 */
     .input-block-card { background: #fff; border: 2px solid #e2e8f0; border-radius: 16px; padding: 16px; margin-bottom: 16px; box-shadow: 2px 2px 0 rgba(0,0,0,0.03); }
     .input-block-title { font-family: var(--font-hand); font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; font-size: 1rem; }
     .airline-group-card { background: #fdfdfd; border: 2px solid #bfdbfe; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 4px 0 rgba(191, 219, 254, 0.2); overflow: hidden; }
     .airline-header { background: #eff6ff; padding: 12px 16px; border-bottom: 2px solid #bfdbfe; display: flex; justify-content: space-between; align-items: center; }
     
-    /* 底部導覽列 */
     .nav-bottom { position: fixed; bottom: 0; left: 0; width: 100%; background: #ffffff; border-top: 2px solid #e2e8f0; border-top-left-radius: 24px; border-top-right-radius: 24px; display: flex; justify-content: space-evenly; padding: 12px 0 25px 0; z-index: 1000; box-shadow: 0 -4px 20px rgba(0,0,0,0.05); }
     .nav-item { color: var(--text-light); font-size: 0.75rem; font-weight: 700; cursor: pointer; padding: 6px; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 4px; font-family: var(--font-hand); flex: 1; border: none; background: none; white-space: nowrap; }
     .nav-item .lucide { font-size: 1.4rem; margin-bottom: 2px; }
@@ -157,17 +160,17 @@
     .ai-level1-card { background: #1e293b; color: #ffffff; border-radius: 16px; padding: 20px; text-align: center; }
     .ai-level4-box { background: #ffbf00; color: #000000; border: 2px solid #d97706; border-radius: 12px; padding: 16px; font-weight: bold; font-size: 15px; }
     .ai-json-patch { background: #0f172a; color: #34d399; font-family: monospace; font-size: 0.8rem; padding: 12px; border-radius: 8px; overflow-x: auto; white-space: pre; text-align: left; }
+    
     .custom-card-item { background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
     .footer-disclaimer { background-color: #1a1a1a; color: #e5e5e5; padding: 24px 20px 120px 20px; font-size: 15px; line-height: 1.6; text-align: justify; flex-shrink: 0; width: 100%; box-sizing: border-box; font-family: var(--font-main); font-weight: 500; }
   </style>
 </head>
 <body>
-  <!-- SVG 圖標庫 -->
   <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
     <symbol id="icon-plane" viewBox="0 0 24 24"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-.5-.5-2.5 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.2-1.1.6L3 8l6 4-3 3-3-1-2 2 4 4 2-2-1-3 3-3 4 6 1.2-.7c.4-.2.7-.6.6-1.1z"/></symbol>
     <symbol id="icon-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
     <symbol id="icon-gear" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1-1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
-    <symbol id="icon-cake" viewBox="0 0 24 24"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5-2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></symbol>
+    <symbol id="icon-cake" viewBox="0 0 24 24"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5-2 4-2 2.5-2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></symbol>
     <symbol id="icon-ticket" viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></symbol>
     <symbol id="icon-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
     <symbol id="icon-calc" viewBox="0 0 24 24"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/></symbol>
@@ -188,40 +191,34 @@
     <symbol id="icon-external" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></symbol>
     <symbol id="icon-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></symbol>
   </svg>
-
-  <!-- 頂部導航與狀態列 -->
   <div class="header">
-    <div class="d-flex align-items-center">
+    <div class="tdc-flex tdc-align-center tdc-w-100">
       <div class="header-icon"><svg class="lucide"><use href="#icon-plane"/></svg></div>
-      <div class="header-title d-flex align-items-center">
-        <!-- 心跳燈 -->
+      <div class="header-title tdc-flex tdc-align-center">
         <div id="sync-indicator" class="sync-dot sync-green me-2" title="點擊強制對齊最新規章" onclick="triggerSync()"></div>
-        <div>
+        <div style="min-width: 0;">
             <h5>TDC環哩匯X航空消費累哩工具（AI版）</h5>
-            <small class="text-secondary fw-bold">v14.5 全球大滿貫版</small>
+            <small class="text-secondary fw-bold">v14.9 終極防禦版</small>
         </div>
       </div>
-    </div>
-    <div class="d-flex gap-2">
-        <button class="btn-header text-primary" onclick="openGuide()"><svg class="lucide me-1"><use href="#icon-book"/></svg> 教學</button>
-        <button class="btn-header" onclick="openSettings()"><svg class="lucide"><use href="#icon-gear"/></svg></button>
+      <div class="header-btn-group">
+          <button class="btn-header text-primary" onclick="openGuide()"><svg class="lucide me-1"><use href="#icon-book"/></svg> <span class="btn-text-hide">教學</span></button>
+          <button class="btn-header" onclick="openSettings()"><svg class="lucide"><use href="#icon-gear"/></svg></button>
+      </div>
     </div>
   </div>
-
   <div class="container-custom">
     
-    <!-- 主計算頁面 -->
     <div id="page-calc" class="page-section">
       <div class="card-box">
-        <!-- 原生 Label 開關 -->
-        <div class="row mb-3">
-          <div class="col-6">
+        <div class="tdc-row tdc-mb-3">
+          <div class="tdc-col-6">
             <label class="switch-group" id="switch-box-birthdayMode" style="background:#fff1f2; border-color:#fecdd3; box-shadow: 2px 2px 0 #fecdd3;">
               <span class="switch-label text-danger"><svg class="lucide"><use href="#icon-cake"/></svg> 生日月</span>
               <input class="form-check-input flex-shrink-0" type="checkbox" id="birthdayMode">
             </label>
           </div>
-          <div class="col-6">
+          <div class="tdc-col-6">
             <label class="switch-group" id="switch-box-flyMode" style="background:#ecfdf5; border-color:#a7f3d0; box-shadow: 2px 2px 0 #a7f3d0;">
               <span class="switch-label text-success"><svg class="lucide"><use href="#icon-ticket"/></svg> 越飛有哩</span>
               <input class="form-check-input flex-shrink-0" type="checkbox" id="flyMode">
@@ -229,8 +226,8 @@
           </div>
         </div>
         
-        <div class="mb-3">
-          <label class="form-label text-primary d-flex align-items-center"><svg class="lucide me-1"><use href="#icon-target"/></svg> 累積目標</label>
+        <div class="tdc-mb-3">
+          <label class="form-label text-primary tdc-flex tdc-align-center"><svg class="lucide me-1"><use href="#icon-target"/></svg> 累積目標</label>
           <select id="redemption-target" class="form-select border-primary" style="background-color: #eff6ff !important; border-width: 2px;">
             <option value="ALL">🌏 不指定 (所有航司)</option>
             <option value="AM_BR">🌏 亞萬 / 長榮 (AM / BR)</option>
@@ -238,15 +235,15 @@
           </select>
         </div>
 
-        <div class="row mb-1">
-            <div class="col-5">
+        <div class="tdc-row tdc-mb-1">
+            <div class="tdc-col-5">
               <label class="form-label">幣別</label>
               <select id="currency-type" class="form-select" onchange="toggleFxInput(this.value)">
                 <option value="TWD">🇹🇼 台幣</option>
                 <option value="FOREIGN">🌎 外幣</option>
               </select>
             </div>
-            <div class="col-7">
+            <div class="tdc-col-7">
               <label class="form-label">支付方式</label>
               <select id="payment" class="form-select">
                 <option value="physical">💳 實體卡</option>
@@ -257,32 +254,36 @@
             </div>
         </div>
 
-        <!-- 外幣匯率輸入區 -->
-        <div id="fx-input-group" class="mt-2 mb-2 p-3" style="background: #f0f9ff; border: 2px dashed #bae6fd; border-radius: 16px; display: none;">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <label class="form-label text-primary small m-0">當下匯率 (含1.5%)</label>
-                <a href="https://rate.bot.com.tw/xrt?Lang=zh-TW" target="_blank" class="small fw-bold d-flex align-items-center text-primary-dark"><svg class="lucide me-1" style="width:14px;height:14px;"><use href="#icon-external"/></svg> 台銀牌告匯率</a>
+        <div id="fx-input-group" class="mt-2 tdc-mb-2 p-3" style="background: #f0f9ff; border: 2px dashed #bae6fd; border-radius: 16px; display: none;">
+            <div class="tdc-flex tdc-justify-between tdc-align-center tdc-mb-2">
+                <label class="form-label text-primary small tdc-m-0">當下匯率 (牌告匯率)</label>
+                <a href="https://rate.bot.com.tw/xrt?Lang=zh-TW" target="_blank" class="small fw-bold tdc-flex tdc-align-center text-primary-dark"><svg class="lucide me-1" style="width:14px;height:14px;"><use href="#icon-external"/></svg> 台銀牌告匯率</a>
             </div>
-            <div class="input-wrapper">
-                <input type="number" id="fx-rate-input" class="form-control pe-5" placeholder="輸入匯率" inputmode="decimal" min="0" step="0.0001">
-                <button class="btn-inline-clear" type="button" onclick="clearInput('fx-rate-input')">⊗</button>
+            <div class="tdc-flex tdc-align-center gap-2 tdc-mb-1">
+                <span class="fw-bold text-secondary" style="white-space: nowrap;">1 外幣 =</span>
+                <div class="input-wrapper tdc-grow-1">
+                    <input type="number" id="fx-rate-input" class="form-control pe-5" placeholder="輸入牌告數字" inputmode="decimal" min="0" step="0.0001" oninput="updateFxFeedback()">
+                    <button class="btn-inline-clear" type="button" onclick="clearInput('fx-rate-input')">⊗</button>
+                </div>
+                <span class="fw-bold text-secondary">TWD</span>
+            </div>
+            <div id="fx-feedback" class="small fw-bold mt-2" style="color: #ef4444; display: none;">
+                💡 實質匯率 (含1.5%)：<span id="fx-real-rate">0</span>
             </div>
         </div>
 
-        <!-- 消費金額輸入區 -->
-        <div class="mb-3 mt-3">
-          <label class="form-label" id="amount-label">消費金額 (TWD)</label>
+        <div class="tdc-mb-3 mt-3">
+          <label class="form-label" id="amount-label">🇹🇼 消費金額 (TWD)</label>
           <div class="input-wrapper">
             <input type="number" id="amount" class="form-control pe-5" placeholder="0" inputmode="decimal" oninput="checkInputStyle(this)">
             <button class="btn-inline-clear" type="button" onclick="clearInput('amount')">⊗</button>
           </div>
-          <button class="btn btn-outline-danger btn-sm w-100 mt-2 rounded-pill fw-bold" onclick="toggleNegative('amount')"><svg class="lucide me-1" style="width:14px;height:14px;"><use href="#icon-refresh"/></svg>退刷 / 修正上限額度</button>
+          <button class="btn btn-outline-danger btn-sm tdc-w-100 mt-2 rounded-pill fw-bold" onclick="toggleNegative('amount')"><svg class="lucide me-1" style="width:14px;height:14px;"><use href="#icon-refresh"/></svg>退刷 / 修正上限額度</button>
         </div>
 
-        <!-- 關鍵字輸入區 -->
-        <div class="mb-3">
+        <div class="tdc-mb-3">
           <label class="form-label">消費類別 / 備註</label>
-          <select id="category" class="form-select mb-2" onchange="updateKeywordPlaceholder()">
+          <select id="category" class="form-select tdc-mb-2" onchange="updateKeywordPlaceholder()">
             <option value="general">🛍️ 一般消費</option>
             <option value="dining">🍽️ 餐廳/外送</option>
             <option value="travel">🏨 旅遊/訂房</option>
@@ -291,78 +292,84 @@
             <option value="flight_other">✈️ 其他航空</option>
           </select>
           <div class="input-wrapper">
-            <input type="text" id="keyword-input" class="form-control pe-5" placeholder="輸入店家關鍵字 (如: 麥當勞, Agoda)..." style="font-size:0.9rem;">
+            <input type="text" id="keyword-input" class="form-control pe-5" placeholder="輸入店家關鍵字 (如: 麥當勞, Agoda, JPY, 日本)..." style="font-size:0.9rem;">
             <button class="btn-inline-clear" type="button" onclick="clearInput('keyword-input')">⊗</button>
           </div>
+          <div class="small text-muted mt-2 px-1">💡 提示：輸入「日本、JPY」或「歐洲、英國」可自動觸發特定卡片之海外加碼與防護網。</div>
         </div>
 
         <button onclick="calculate()" class="btn-action">開始計算 <svg class="lucide ms-2"><use href="#icon-calc"/></svg></button>
       </div>
 
-      <!-- 動態外幣試算看板 -->
-      <div id="fx-calc-board" class="mb-3 p-3 shadow-sm" style="background: #fdf4ff; border: 2px dashed #e879f9; border-radius: 16px; display: none;"></div>
+      <div id="fx-calc-board" class="tdc-mb-3 p-3 shadow-sm" style="background: #fdf4ff; border: 2px dashed #e879f9; border-radius: 16px; display: none;"></div>
 
-      <!-- 計算結果區塊 -->
       <div id="result-area" style="display: none;">
         <div id="cards-container"></div>
       </div>
     </div>
 
-    <!-- 明細分頁 -->
     <div id="page-list" class="page-section" style="display:none;">
-        <div class="d-flex justify-content-between align-items-end mb-3 px-1">
-            <h5 class="text-primary mb-0 d-flex align-items-center"><svg class="lucide me-2"><use href="#icon-list"/></svg>待結算明細</h5>
+        <div class="tdc-flex tdc-justify-between align-items-end tdc-mb-3 px-1">
+            <h5 class="text-primary mb-0 tdc-flex tdc-align-center"><svg class="lucide me-2"><use href="#icon-list"/></svg>待結算明細</h5>
             <span class="badge bg-secondary rounded-pill" id="pending-count" style="font-size:0.8rem;">0 筆</span>
         </div>
         <div id="transaction-list-container"></div>
     </div>
 
-    <!-- 監控與總帳分頁 -->
     <div id="page-status" class="page-section" style="display:none;">
       <div class="card-box">
-        <h5 class="mb-3 text-primary d-flex align-items-center"><svg class="lucide me-2"><use href="#icon-chart"/></svg>本期總帳</h5>
+        <h5 class="tdc-mb-3 text-primary tdc-flex tdc-align-center"><svg class="lucide me-2"><use href="#icon-chart"/></svg>本期總帳</h5>
         <div id="status-container"></div>
-        <div class="mt-3 d-flex gap-2">
-           <button onclick="clearCurrentStats()" class="btn btn-outline-danger flex-grow-1 font-hand fw-bold rounded-pill">全部重置</button>
-           <button onclick="batchImport()" class="btn btn-success flex-grow-1 font-hand fw-bold rounded-pill" style="box-shadow: 2px 2px 0 #047857;">一鍵進倉</button>
+        <div class="mt-3 tdc-flex gap-2">
+           <button onclick="clearCurrentStats()" class="btn btn-outline-danger tdc-grow-1 font-hand fw-bold rounded-pill">全部重置</button>
+           <button onclick="batchImport()" class="btn btn-success tdc-grow-1 font-hand fw-bold rounded-pill" style="box-shadow: 2px 2px 0 #047857;">一鍵進倉</button>
         </div>
       </div>
       <div class="card-box mt-3" style="background:#fffbeb; border-color:#fde68a;">
-        <h5 class="mb-3 text-warning d-flex align-items-center" style="color:#b45309;"><svg class="lucide me-2"><use href="#icon-shield"/></svg>上限小管家</h5>
+        <h5 class="tdc-mb-3 text-warning tdc-flex tdc-align-center" style="color:#b45309;"><svg class="lucide me-2"><use href="#icon-shield"/></svg>上限小管家</h5>
         <div id="limits-container"></div>
       </div>
     </div>
-
-    <!-- 倉庫管理分頁 -->
     <div id="page-warehouse" class="page-section" style="display:none;">
-        <div class="d-flex p-1 mb-3" style="background: #e2e8f0; border-radius: 50px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
-            <button class="flex-grow-1 btn font-hand fw-bold rounded-pill" id="tab-btn-manage" onclick="switchWarehouseTab('manage')" style="color: #64748b; border:none;">資產管理</button>
-            <button class="flex-grow-1 btn font-hand fw-bold rounded-pill active" id="tab-btn-planner" onclick="switchWarehouseTab('planner')" style="background: #ffffff; color: var(--primary-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.08); border:none;">兌換試算</button>
+        <div class="tdc-flex p-1 tdc-mb-3" style="background: #e2e8f0; border-radius: 50px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
+            <button class="tdc-grow-1 btn font-hand fw-bold rounded-pill" id="tab-btn-manage" onclick="switchWarehouseTab('manage')" style="color: #64748b; border:none;">資產管理</button>
+            <button class="tdc-grow-1 btn font-hand fw-bold rounded-pill active" id="tab-btn-planner" onclick="switchWarehouseTab('planner')" style="background: #ffffff; color: var(--primary-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.08); border:none;">兌換試算</button>
         </div>
 
         <div id="warehouse-view-manage" style="display:none;">
             <div class="input-block-card">
-                <div class="input-block-title text-primary"><svg class="lucide me-2"><use href="#icon-plane"/></svg> 存入航空哩程</div>
-                <div class="mb-2"><input id="native-airline-name" class="form-control" placeholder="航司名稱 (例如: 華航)"></div>
-                <div class="mb-3"><input id="native-current" type="number" class="form-control" placeholder="持有數量"></div>
-                <button onclick="addNativeAsset()" class="btn btn-outline-primary w-100 rounded-pill font-hand fw-bold">存入帳戶</button>
+                <div class="input-block-title text-primary"><svg class="lucide me-2"><use href="#icon-plane"/></svg> 板塊 A：存入航空哩程</div>
+                <div class="tdc-mb-2"><input id="native-airline-name" class="form-control" placeholder="航司名稱 (例如: 華航)"></div>
+                <div class="tdc-mb-3"><input id="native-current" type="number" class="form-control" placeholder="持有數量"></div>
+                <button onclick="addNativeAsset()" class="btn btn-outline-primary tdc-w-100 rounded-pill font-hand fw-bold">存入帳戶</button>
+                <div class="small text-muted mt-2 tdc-text-center">💡 系統將主動比對相似名稱並引導歸戶合併</div>
             </div>
             
-            <div class="input-block-card">
-                <div class="input-block-title text-warning" style="color:#d97706;"><svg class="lucide me-2"><use href="#icon-rotate"/></svg> 存入轉點積分</div>
-                <div class="row mb-2">
-                    <div class="col-7"><input id="trans-source-name" class="form-control" placeholder="來源 (如: 萬豪)"></div>
-                    <div class="col-5"><input id="trans-current" type="number" class="form-control" placeholder="持有數量"></div>
+            <div class="input-block-card" style="border-color: #cbd5e1;">
+                <div class="input-block-title text-secondary"><svg class="lucide me-2"><use href="#icon-box"/></svg> 板塊 B：通用積分資產</div>
+                <div class="tdc-row tdc-mb-2">
+                    <div class="tdc-col-7"><input id="raw-point-name" class="form-control" placeholder="名稱 (如: 萬豪, 小樹點)"></div>
+                    <div class="tdc-col-5"><input id="raw-point-current" type="number" class="form-control" placeholder="持有數量"></div>
                 </div>
-                <div class="mb-2"><input id="trans-target-airline" class="form-control" placeholder="欲兌換航司 (歸戶依據)"></div>
-                <div class="bg-light p-2 rounded-3 border mb-3">
-                    <label class="small text-muted fw-bold mb-1">兌換公式 (例如: 3點 = 1哩)</label>
-                    <div class="d-flex align-items-center gap-2 mb-2">
+                <button onclick="addRawAsset()" class="btn btn-outline-secondary tdc-w-100 rounded-pill font-hand fw-bold">存入資產庫</button>
+                <div class="small text-muted mt-2 tdc-text-center">💡 僅記錄名稱與數量，不具備換算公式</div>
+            </div>
+
+            <div class="input-block-card">
+                <div class="input-block-title text-warning" style="color:#d97706;"><svg class="lucide me-2"><use href="#icon-rotate"/></svg> 板塊 C：積分換算工具</div>
+                <div class="tdc-row tdc-mb-2">
+                    <div class="tdc-col-7"><input id="trans-source-name" class="form-control" placeholder="來源 (如: 匯豐旅人)"></div>
+                    <div class="tdc-col-5"><input id="trans-current" type="number" class="form-control" placeholder="持有數量"></div>
+                </div>
+                <div class="tdc-mb-2"><input id="trans-target-airline" class="form-control" placeholder="欲兌換航司 (歸戶依據)"></div>
+                <div class="bg-light p-2 rounded-3 border tdc-mb-3">
+                    <label class="small text-muted fw-bold tdc-mb-1">兌換公式 (例如: 3點 = 1哩)</label>
+                    <div class="tdc-flex tdc-align-center gap-2 tdc-mb-2">
                         <input id="trans-unit-points" type="number" class="form-control" placeholder="3"> <span>點 =</span>
                         <input id="trans-unit-miles" type="number" class="form-control" placeholder="1"> <span>哩</span>
                     </div>
-                    <label class="small text-primary fw-bold mb-1 mt-2">✨ 額外轉換加碼 <span class="text-danger">(選填)</span></label>
-                    <div class="d-flex align-items-center gap-2">
+                    <label class="small text-primary fw-bold tdc-mb-1 mt-2">✨ 額外轉換加碼 <span class="text-danger">(選填)</span></label>
+                    <div class="tdc-flex tdc-align-center gap-2">
                         <span class="small fw-bold text-muted">每滿</span>
                         <input id="trans-bonus-req" type="number" class="form-control form-control-sm" placeholder="如: 60000">
                         <span class="small fw-bold text-muted">加贈</span>
@@ -370,28 +377,28 @@
                         <span class="small fw-bold text-muted">哩</span>
                     </div>
                 </div>
-                <button onclick="addTransferAsset()" class="btn btn-outline-warning w-100 rounded-pill font-hand fw-bold" style="color:#b45309; border-color:#d97706;">存入資產</button>
+                <button onclick="addTransferAsset()" class="btn btn-outline-warning tdc-w-100 rounded-pill font-hand fw-bold" style="color:#b45309; border-color:#d97706;">存入試算工具</button>
             </div>
+            
             <div id="warehouse-list"></div>
         </div>
 
         <div id="warehouse-view-planner">
-            <div class="d-flex gap-2 mb-3">
-                <button class="ai-btn-purple flex-grow-1 d-flex flex-column align-items-center justify-content-center" onclick="startAIDiagnosis('global')">
-                    <svg class="mb-1" style="width:20px;height:20px;"><use href="#icon-sparkle"/></svg>
+            <div class="tdc-flex gap-2 tdc-mb-3">
+                <button class="ai-btn-purple tdc-grow-1 tdc-flex flex-column tdc-align-center tdc-justify-center" onclick="startAIDiagnosis('global')">
+                    <svg class="tdc-mb-1" style="width:20px;height:20px;"><use href="#icon-sparkle"/></svg>
                     全局資產巔峰推薦
                 </button>
-                <button class="ai-btn-blue flex-grow-1 d-flex flex-column align-items-center justify-content-center" onclick="startAIDiagnosis('specific')">
-                    <svg class="mb-1" style="width:20px;height:20px;"><use href="#icon-target"/></svg>
+                <button class="ai-btn-blue tdc-grow-1 tdc-flex flex-column tdc-align-center tdc-justify-center" onclick="startAIDiagnosis('specific')">
+                    <svg class="tdc-mb-1" style="width:20px;height:20px;"><use href="#icon-target"/></svg>
                     指定航線達成方案
                 </button>
             </div>
 
-            <!-- 💡 v14.5 全球大滿貫版：擴充航區選單 -->
             <div class="card-box" style="background: linear-gradient(to bottom, #eff6ff, #ffffff); position: relative;">
-              <h5 class="mb-3 text-primary d-flex align-items-center"><svg class="lucide me-2"><use href="#icon-map"/></svg>設定全球兌換目標</h5>
-              <div class="row mb-2">
-                  <div class="col-6"><label class="form-label small fw-bold">🛫 出發地</label>
+              <h5 class="tdc-mb-3 text-primary tdc-flex tdc-align-center"><svg class="lucide me-2"><use href="#icon-map"/></svg>設定全球兌換目標</h5>
+              <div class="tdc-row tdc-mb-2">
+                  <div class="tdc-col-6"><label class="form-label small fw-bold">🛫 出發地</label>
                       <select id="planner-from" class="form-select" onchange="runPlannerCalc()">
                           <option value="TW">🇹🇼 台灣</option><option value="HK_MO">🇭🇰 港澳</option><option value="CN">🇨🇳 中國大陸</option><option value="NE_ASIA">🌸 東北亞</option><option value="SE_ASIA">🥥 東南亞</option>
                           <option value="S_ASIA">🕌 南亞 (含馬爾地夫)</option><option value="OCEANIA">🦘 大洋洲 (含關島/帛琉)</option>
@@ -399,7 +406,7 @@
                           <option value="AFRICA">🦁 非洲</option><option value="S_AMERICA">🗿 南美洲</option>
                       </select>
                   </div>
-                  <div class="col-6"><label class="form-label small fw-bold">🛬 目的地</label>
+                  <div class="tdc-col-6"><label class="form-label small fw-bold">🛬 目的地</label>
                       <select id="planner-to" class="form-select" onchange="runPlannerCalc()">
                           <option value="TW">🇹🇼 台灣</option><option value="HK_MO">🇭🇰 港澳</option><option value="CN">🇨🇳 中國大陸</option><option value="NE_ASIA" selected>🌸 東北亞</option><option value="SE_ASIA">🥥 東南亞</option>
                           <option value="S_ASIA">🕌 南亞 (含馬爾地夫)</option><option value="OCEANIA">🦘 大洋洲 (含關島/帛琉)</option>
@@ -408,19 +415,19 @@
                       </select>
                   </div>
               </div>
-              <div class="row mb-2">
-                <div class="col-6"><label class="form-label small fw-bold">📅 出發日期</label><input type="date" id="planner-date" class="form-control" onchange="runPlannerCalc()"></div>
-                <div class="col-6"><label class="form-label small fw-bold">選擇艙等</label><select id="planner-class" class="form-select" onchange="runPlannerCalc()"><option value="Y">💺 經濟艙</option><option value="C">🥂 商務艙</option><option value="F">👑 頭等艙</option></select></div>
+              <div class="tdc-row tdc-mb-2">
+                <div class="tdc-col-6"><label class="form-label small fw-bold">📅 出發日期</label><input type="date" id="planner-date" class="form-control" onchange="runPlannerCalc()"></div>
+                <div class="tdc-col-6"><label class="form-label small fw-bold">選擇艙等</label><select id="planner-class" class="form-select" onchange="runPlannerCalc()"><option value="Y">💺 經濟艙</option><option value="C">🥂 商務艙</option><option value="F">👑 頭等艙</option></select></div>
               </div>
               
-              <label class="switch-group mb-2">
+              <label class="switch-group tdc-mb-2">
                 <span class="switch-label fw-bold"><svg class="lucide me-1"><use href="#icon-rotate"/></svg> 行程：<span id="trip-label">來回 (Round-trip)</span></span>
                 <input class="form-check-input" type="checkbox" id="planner-trip-type" checked onchange="togglePlannerTrip()">
               </label>
             </div>
             
-            <div class="mb-3 px-1 mt-3">
-                <h6 class="fw-bold text-secondary mb-2 d-flex align-items-center"><svg class="lucide me-1"><use href="#icon-box"/></svg>勾選要動用的倉庫資源</h6>
+            <div class="tdc-mb-3 px-1 mt-3">
+                <h6 class="fw-bold text-secondary tdc-mb-2 tdc-flex tdc-align-center"><svg class="lucide me-1"><use href="#icon-box"/></svg>勾選要動用的倉庫資源</h6>
                 <div id="planner-asset-container"></div>
             </div>
             
@@ -428,7 +435,6 @@
         </div>
     </div>
   </div>
-  
   <div class="nav-bottom">
     <button class="nav-item active" onclick="switchPage('calc', this)"><svg class="lucide"><use href="#icon-calc"/></svg>計算</button>
     <button class="nav-item" onclick="switchPage('list', this)"><div style="position:relative;"><svg class="lucide"><use href="#icon-list"/></svg><span id="nav-badge-list" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display:none; font-size: 0.5rem;">0</span></div>明細</button>
@@ -441,98 +447,93 @@
     亞商卓盛華閣股份有限公司（包括但不限於母集團及旗下關聯子公司、分公司）、社團法人臺灣哩程研究社、「環哩匯・尊貴常旅客俱樂部」、「社團法人環球常旅客協會」均無須對任何人就由於使用或依賴源自此活動網站的資料而引致或與此有關的任何損失、損害或任何形式的費用（包括但不限於任何經濟損失或其他直接、間接或相應而生的損害）承擔責任。
   </footer>
 
-  <!-- 搬家/還原確認彈窗 -->
   <div class="modal fade" id="customConfirmModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content text-center p-4">
-        <svg class="lucide text-danger mx-auto mb-3" style="width:3rem;height:3rem;"><use href="#icon-warn"/></svg>
-        <p class="mb-2 fw-bold text-danger fs-5">確定要還原數據嗎？</p>
+      <div class="modal-content tdc-text-center p-4">
+        <svg class="lucide text-danger mx-auto tdc-mb-3" style="width:3rem;height:3rem;"><use href="#icon-warn"/></svg>
+        <p class="tdc-mb-2 fw-bold text-danger fs-5">確定要還原數據嗎？</p>
         <p class="mb-4 small text-muted">這將完全覆蓋目前手機內的所有紀錄，建議您先執行搬家備份！</p>
-        <div class="d-flex gap-2 w-100">
-          <button type="button" class="btn btn-light flex-grow-1 rounded-pill" onclick="hideConfirmModal()">取消</button>
-          <button type="button" class="btn btn-danger flex-grow-1 rounded-pill fw-bold" id="confirm-restore-btn">確定還原</button>
+        <div class="tdc-flex gap-2 tdc-w-100">
+          <button type="button" class="btn btn-light tdc-grow-1 rounded-pill" onclick="hideConfirmModal()">取消</button>
+          <button type="button" class="btn btn-danger tdc-grow-1 rounded-pill fw-bold" id="confirm-restore-btn">確定還原</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 人工微調修正彈窗 -->
   <div class="modal fade" id="manualAdjustModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content p-4 border-0" style="background: #fffbeb;">
-        <h5 class="fw-bold mb-3 d-flex align-items-center" style="color: #b45309;"><svg class="lucide me-2"><use href="#icon-pen"/></svg> 人工微調修正</h5>
-        <p class="small text-muted mb-3">若系統計算因匯率或四捨五入產生誤差，請在此輸入您實際獲取的正確數字以進行記帳：</p>
-        <div class="input-wrapper mb-3">
+        <h5 class="fw-bold tdc-mb-3 tdc-flex tdc-align-center" style="color: #b45309;"><svg class="lucide me-2"><use href="#icon-pen"/></svg> 人工微調修正</h5>
+        <p class="small text-muted tdc-mb-3">若系統計算因匯率或四捨五入產生誤差，請在此輸入您實際獲取的正確數字以進行記帳：</p>
+        <div class="input-wrapper tdc-mb-3">
             <input type="number" id="manual-adjust-val" class="form-control border-warning pe-5" placeholder="例如: 1500" style="font-size: 1.2rem; color: #b45309 !important;">
             <button class="btn-inline-clear" type="button" onclick="clearInput('manual-adjust-val')">⊗</button>
         </div>
         <input type="hidden" id="manual-adjust-idx">
-        <div class="d-flex gap-2">
-          <button type="button" class="btn btn-light flex-grow-1 rounded-pill" data-bs-dismiss="modal">取消</button>
-          <button type="button" class="btn btn-warning text-white flex-grow-1 rounded-pill fw-bold" onclick="confirmManualAdjust()" style="background: #f59e0b; border:none; box-shadow: 2px 2px 0 #d97706;">強制記帳</button>
+        <div class="tdc-flex gap-2">
+          <button type="button" class="btn btn-light tdc-grow-1 rounded-pill" data-bs-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-warning text-white tdc-grow-1 rounded-pill fw-bold" onclick="confirmManualAdjust()" style="background: #f59e0b; border:none; box-shadow: 2px 2px 0 #d97706;">強制記帳</button>
         </div>
       </div>
     </div>
   </div>
   
-  <!-- 小管家額度修改彈窗 -->
   <div class="modal fade" id="editLimitModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content p-4 border-0" style="background: #f8fafc;">
-        <h5 class="fw-bold mb-3 d-flex align-items-center text-primary-dark"><svg class="lucide me-2"><use href="#icon-pen"/></svg> 修改已消耗額度</h5>
-        <p class="small text-muted mb-3">請輸入此卡片本期「已經消耗」的累積金額。系統將直接覆寫現有進度：</p>
-        <div class="input-wrapper mb-3">
+        <h5 class="fw-bold tdc-mb-3 tdc-flex tdc-align-center text-primary-dark"><svg class="lucide me-2"><use href="#icon-pen"/></svg> 修改已消耗額度</h5>
+        <p class="small text-muted tdc-mb-3">請輸入此卡片本期「已經消耗」的累積金額。系統將直接覆寫現有進度：</p>
+        <div class="input-wrapper tdc-mb-3">
             <input type="number" id="edit-limit-val" class="form-control border-primary pe-5" placeholder="例如: 15000" style="font-size: 1.2rem; color: #1e40af !important;">
             <button class="btn-inline-clear" type="button" onclick="clearInput('edit-limit-val')">⊗</button>
         </div>
         <input type="hidden" id="edit-limit-id">
-        <div class="d-flex gap-2">
-          <button type="button" class="btn btn-light flex-grow-1 rounded-pill" data-bs-dismiss="modal">取消</button>
-          <button type="button" class="btn btn-primary flex-grow-1 rounded-pill fw-bold" onclick="confirmEditLimit()">確認修改</button>
+        <div class="tdc-flex gap-2">
+          <button type="button" class="btn btn-light tdc-grow-1 rounded-pill" data-bs-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary tdc-grow-1 rounded-pill fw-bold" onclick="confirmEditLimit()">確認修改</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- AI 解鎖引導彈窗 -->
   <div class="modal fade" id="aiIntroModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content p-4" style="background: linear-gradient(to bottom, #faf5ff, #ffffff);">
-        <div class="text-center mb-3">
-            <svg class="text-primary mb-2" style="width:2rem;height:2rem; color:#a855f7 !important;"><use href="#icon-sparkle"/></svg>
-            <h5 class="fw-bold m-0" style="color: #4c1d95;">解鎖雙引擎 AI 戰略軍師</h5>
+        <div class="tdc-text-center tdc-mb-3">
+            <svg class="text-primary tdc-mb-2" style="width:2rem;height:2rem; color:#a855f7 !important;"><use href="#icon-sparkle"/></svg>
+            <h5 class="fw-bold tdc-m-0" style="color: #4c1d95;">解鎖雙引擎 AI 戰略軍師</h5>
         </div>
         <div class="px-2 mb-4">
-          <div class="d-flex align-items-start mb-3"><div class="fw-bold me-2 mt-1" style="color:#8b5cf6;">●</div><div class="small"><b>全局巔峰推薦</b>：掃描所有資產，主動找出單哩價值最高的隱藏航線。</div></div>
-          <div class="d-flex align-items-start mb-3"><div class="fw-bold me-2 mt-1" style="color:#8b5cf6;">●</div><div class="small"><b>指定路徑精算</b>：鎖定您的目的地，提供直飛、聯盟、套利等多種方案對比。</div></div>
-          <div class="d-flex align-items-start mb-3"><div class="fw-bold me-2 mt-1" style="color:#8b5cf6;">●</div><div class="small"><b>實時規章審計</b>：比對最新官方鐵律，主動糾正過時比例。</div></div>
+          <div class="tdc-flex align-items-start tdc-mb-3"><div class="fw-bold me-2 mt-1" style="color:#8b5cf6;">●</div><div class="small"><b>全局巔峰推薦</b>：掃描所有資產，主動找出單哩價值最高的隱藏航線。</div></div>
+          <div class="tdc-flex align-items-start tdc-mb-3"><div class="fw-bold me-2 mt-1" style="color:#8b5cf6;">●</div><div class="small"><b>指定路徑精算</b>：鎖定您的目的地，提供直飛、聯盟、套利等多種方案對比。</div></div>
+          <div class="tdc-flex align-items-start tdc-mb-3"><div class="fw-bold me-2 mt-1" style="color:#8b5cf6;">●</div><div class="small"><b>實時規章審計</b>：比對最新官方鐵律，主動糾正過時比例。</div></div>
         </div>
-        <button class="btn btn-primary w-100 rounded-pill fw-bold font-hand py-2" style="background: var(--ai-purple); border:none; box-shadow: 0 4px 10px rgba(124,58,237,0.3);" onclick="goToSettingsFromAI()">前往設定解鎖</button>
+        <button class="btn btn-primary tdc-w-100 rounded-pill fw-bold font-hand py-2" style="background: var(--ai-purple); border:none; box-shadow: 0 4px 10px rgba(124,58,237,0.3);" onclick="goToSettingsFromAI()">前往設定解鎖</button>
       </div>
     </div>
   </div>
 
-  <!-- 系統設定與管理彈窗 -->
   <div class="modal fade" id="settingsModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="fw-bold m-0 d-flex align-items-center"><svg class="lucide me-2 text-primary"><use href="#icon-gear"/></svg>系統設定與管理</h5>
+        <div class="tdc-flex tdc-justify-between tdc-align-center tdc-mb-3">
+            <h5 class="fw-bold tdc-m-0 tdc-flex tdc-align-center"><svg class="lucide me-2 text-primary"><use href="#icon-gear"/></svg>系統設定與管理</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body p-0">
           <div class="mb-4">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <label class="fw-bold text-primary small m-0" style="color:#6d28d9 !important;">Google Gemini API 金鑰</label>
+            <div class="tdc-flex tdc-justify-between tdc-align-center tdc-mb-2">
+              <label class="fw-bold text-primary small tdc-m-0" style="color:#6d28d9 !important;">Google Gemini API 金鑰</label>
               <a href="https://aistudio.google.com/app/apikey" target="_blank" class="small text-decoration-none fw-bold" style="color: #8b5cf6;">如何取得 Key？</a>
             </div>
-            <div class="input-wrapper mb-2">
+            <div class="input-wrapper tdc-mb-2">
                 <input type="password" id="gemini-key" class="form-control rounded-pill pe-5" placeholder="貼上金鑰解鎖雙引擎 AI">
                 <button class="btn-inline-clear" type="button" onclick="clearInput('gemini-key')">⊗</button>
             </div>
             
-            <div class="d-flex justify-content-between align-items-center mt-3 mb-2">
-              <label class="fw-bold text-danger small m-0">GitHub Gist Token (維護者權限)</label>
+            <div class="tdc-flex tdc-justify-between tdc-align-center mt-3 tdc-mb-2">
+              <label class="fw-bold text-danger small tdc-m-0">GitHub Gist Token (維護者權限)</label>
             </div>
             <div class="input-wrapper">
                 <input type="password" id="github-token" class="form-control rounded-pill border-danger pe-5" placeholder="一般使用者請留空">
@@ -541,91 +542,93 @@
             <div class="small text-muted mt-1 px-2">填寫此欄位，AI 戰報將自動產出 rules.json 補丁代碼區塊。</div>
 
             <div class="security-alert-box mt-3">
-              <div class="fw-bold mb-1 d-flex align-items-center"><svg class="lucide me-1"><use href="#icon-shield"/></svg> 資安與隱私承諾</div>
+              <div class="fw-bold tdc-mb-1 tdc-flex tdc-align-center"><svg class="lucide me-1"><use href="#icon-shield"/></svg> 資安與隱私承諾</div>
               <ul class="mb-0 ps-3">
                 <li>本工具為純前端架構，無第三方伺服器。</li>
                 <li>金鑰僅加密儲存於設備本地，請安心使用。</li>
               </ul>
             </div>
-            <button class="btn btn-primary w-100 rounded-pill fw-bold font-hand py-2 mt-3" onclick="saveSettings()">儲存設定</button>
+            <button class="btn btn-primary tdc-w-100 rounded-pill fw-bold font-hand py-2 mt-3" onclick="saveSettings()">儲存設定</button>
           </div>
           <div class="mb-4">
-            <div class="fw-bold mb-2 text-primary">加碼資格確認</div>
-            <!-- 原生 Label 開關 -->
-            <label class="switch-group mb-2">
+            <div class="fw-bold tdc-mb-2 text-primary">加碼資格確認</div>
+            <label class="switch-group tdc-mb-2">
                 <span class="switch-label">匯豐 Live+ 自動扣繳 <small class="text-muted fw-normal">(精選+1%)</small></span>
                 <input class="form-check-input" type="checkbox" id="setting-hsbc-autopay">
             </label>
           </div>
+          
+          <div class="mb-4 p-3" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px;">
+            <div class="fw-bold tdc-mb-2 text-primary-dark tdc-flex tdc-align-center"><svg class="lucide me-1"><use href="#icon-target"/></svg>卡片結帳日設定 (1~31)</div>
+            <div class="small text-muted tdc-mb-3">設定後將精準連動您的月度額度歸零進度</div>
+            <div id="billing-days-container"></div>
+          </div>
+
           <div class="mb-4">
-            <div class="fw-bold mb-2 text-primary">內建神卡開關 (影響計算與監控)</div>
+            <div class="fw-bold tdc-mb-2 text-primary">內建神卡開關 (影響計算與監控)</div>
             <div id="builtin-cards-list"></div>
           </div>
           <div class="mb-4">
-            <div class="fw-bold mb-2 text-primary">自訂卡片 (固定比例)</div>
+            <div class="fw-bold tdc-mb-2 text-primary">自訂卡片 (含客製化防護)</div>
             <div id="custom-cards-list"></div>
-            <button class="btn btn-light w-100 mt-2 font-hand" onclick="addCustomCard()">+ 新增自訂卡片</button>
+            <button class="btn btn-light tdc-w-100 mt-2 font-hand" onclick="addCustomCard()">+ 新增自訂卡片</button>
           </div>
           <div class="mb-4" style="background: #fff7ed; border: 2px dashed #fed7aa; border-radius: 20px; padding: 16px;">
-            <div class="fw-bold mb-3 text-warning d-flex align-items-center" style="color:#b45309;"><svg class="lucide me-2"><use href="#icon-copy"/></svg> 💾 數據搬家中心</div>
-            <button class="btn btn-warning w-100 fw-bold rounded-pill mb-2 font-hand text-white" style="background: #f59e0b; border:none; padding:12px;" onclick="exportDataMagic()">複製搬家代碼</button>
-            <button class="btn btn-primary w-100 fw-bold rounded-pill font-hand" style="background: #3b82f6; border:none; padding:12px;" onclick="triggerRestoreFlow()">貼上還原代碼</button>
+            <div class="fw-bold tdc-mb-3 text-warning tdc-flex tdc-align-center" style="color:#b45309;"><svg class="lucide me-2"><use href="#icon-copy"/></svg> 💾 數據搬家中心</div>
+            <button class="btn btn-warning tdc-w-100 fw-bold rounded-pill tdc-mb-2 font-hand text-white" style="background: #f59e0b; border:none; padding:12px;" onclick="exportDataMagic()">複製搬家代碼</button>
+            <button class="btn btn-primary tdc-w-100 fw-bold rounded-pill font-hand" style="background: #3b82f6; border:none; padding:12px;" onclick="triggerRestoreFlow()">貼上還原代碼</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- AI 戰報彈窗 -->
   <div class="modal fade" id="aiReportModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content p-3 border-0" style="background: #f8fafc;">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5 class="fw-bold m-0 d-flex align-items-center" id="ai-modal-title" style="color: #6d28d9;"><svg class="me-2" style="width:20px;height:20px;"><use href="#icon-sparkle"/></svg>系統診斷回報</h5>
+        <div class="tdc-flex tdc-justify-between tdc-align-center tdc-mb-3">
+          <h5 class="fw-bold tdc-m-0 tdc-flex tdc-align-center" id="ai-modal-title" style="color: #6d28d9;"><svg class="me-2" style="width:20px;height:20px;"><use href="#icon-sparkle"/></svg>系統診斷回報</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body p-0" id="ai-report-content">
-          <!-- AI 內容注入區 -->
-        </div>
+          </div>
       </div>
     </div>
   </div>
 
-  <!-- 教學指南彈窗 -->
   <div class="modal fade" id="guideModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content border-0">
-        <div class="d-flex justify-content-between align-items-center mb-3 p-3 pb-0">
-          <h5 class="fw-bold m-0 d-flex align-items-center text-primary-dark"><svg class="lucide me-2"><use href="#icon-book"/></svg>SOP 戰略操作指南</h5>
+        <div class="tdc-flex tdc-justify-between tdc-align-center tdc-mb-3 p-3 pb-0">
+          <h5 class="fw-bold tdc-m-0 tdc-flex tdc-align-center text-primary-dark"><svg class="lucide me-2"><use href="#icon-book"/></svg>SOP 戰略操作指南</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body p-3 pt-0">
-          <div class="p-3 mb-3" style="background-color: #f0f4f3; border-left: 5px solid #84a59d; border-radius: 12px;">
-              <div class="d-flex align-items-center mb-2"><span class="badge rounded-pill me-2" style="background:#84a59d; font-size:1rem;">1</span><h6 class="fw-bold m-0" style="color:#2f4f4f;">計算與記帳基礎</h6></div>
-              <p class="small text-muted m-0" style="line-height:1.6;">在首頁輸入消費金額與類別，系統將自動套用最新規章算出最優惠信用卡。點擊「開始計算」後，選擇最佳卡片按下「記帳」按鈕即可存入明細。若為外幣消費，請先選擇「🌎 外幣」並貼上台銀匯率，系統將自動為您試算折合台幣本金與 1.5% 手續費；如需退刷或修正上限額度，請點擊輸入框下方的「退刷/修正」按鈕。</p>
+          <div class="p-3 tdc-mb-3" style="background-color: #f0f4f3; border-left: 5px solid #84a59d; border-radius: 12px;">
+              <div class="tdc-flex tdc-align-center tdc-mb-2"><span class="badge rounded-pill me-2" style="background:#84a59d; font-size:1rem;">1</span><h6 class="fw-bold tdc-m-0" style="color:#2f4f4f;">計算與記帳基礎</h6></div>
+              <p class="small text-muted tdc-m-0" style="line-height:1.6;">在首頁輸入消費金額與類別，系統將自動套用最新規章算出最優惠信用卡。點擊「開始計算」後，選擇最佳卡片按下「記帳」按鈕即可存入明細。若為外幣消費，請先選擇「🌎 外幣」並輸入牌告匯率，系統將自動為您試算折合台幣本金與 1.5% 手續費；如需退刷或修正上限額度，請點擊輸入框下方的「退刷/修正」按鈕。</p>
           </div>
-          <div class="p-3 mb-3" style="background-color: #fcf4f3; border-left: 5px solid #e5989b; border-radius: 12px;">
-              <div class="d-flex align-items-center mb-2"><span class="badge rounded-pill me-2" style="background:#e5989b; font-size:1rem;">2</span><h6 class="fw-bold m-0" style="color:#8a4f4f;">神卡上限預警與手動修正</h6></div>
-              <p class="small text-muted m-0" style="line-height:1.6;">本工具內建匯豐 Live+ 加碼上限與台新國泰百萬防溢位機制，當您的消費超出卡片剩餘額度時，系統會顯示紅框並強制降級回饋率。若系統計算結果因匯率差或四捨五入產生微小落差，您可以點擊結果卡片上的「✏️ 修正」按鈕，直接輸入您帳單上實際獲得的點數進行強制記帳，以保證帳目 100% 精準。</p>
+          <div class="p-3 tdc-mb-3" style="background-color: #fcf4f3; border-left: 5px solid #e5989b; border-radius: 12px;">
+              <div class="tdc-flex tdc-align-center tdc-mb-2"><span class="badge rounded-pill me-2" style="background:#e5989b; font-size:1rem;">2</span><h6 class="fw-bold tdc-m-0" style="color:#8a4f4f;">神卡上限預警與手動修正</h6></div>
+              <p class="small text-muted tdc-m-0" style="line-height:1.6;">本工具內建匯豐 Live+ 加碼上限與台新國泰百萬防溢位機制（支援自訂上限金額），當您的消費超出卡片剩餘額度時，系統會顯示紅框並強制降級回饋率。若系統計算結果因匯率差或四捨五入產生微小落差，您可以點擊結果卡片上的「✏️ 修正」按鈕，直接輸入您帳單上實際獲得的點數進行強制記帳，以保證帳目 100% 精準。</p>
           </div>
-          <div class="p-3 mb-3" style="background-color: #f0f4f8; border-left: 5px solid #95b8d1; border-radius: 12px;">
-              <div class="d-flex align-items-center mb-2"><span class="badge rounded-pill me-2" style="background:#95b8d1; font-size:1rem;">3</span><h6 class="fw-bold m-0" style="color:#4a6fa5;">監控結算與一鍵進倉</h6></div>
-              <p class="small text-muted m-0" style="line-height:1.6;">每到信用卡結帳日後，請至下方的「監控」分頁。您可以在這裡一覽本期各卡別的累積總額，確認無誤後點擊「一鍵進倉」，系統會自動將本月累積的所有明細，轉化為「航空哩程」或「轉點積分」並收納至倉庫。若需手動調整某張卡的已刷卡額度，也可點擊進度條旁的「✏️ 編輯」直接覆寫。</p>
+          <div class="p-3 tdc-mb-3" style="background-color: #f0f4f8; border-left: 5px solid #95b8d1; border-radius: 12px;">
+              <div class="tdc-flex tdc-align-center tdc-mb-2"><span class="badge rounded-pill me-2" style="background:#95b8d1; font-size:1rem;">3</span><h6 class="fw-bold tdc-m-0" style="color:#4a6fa5;">監控結算與一鍵進倉</h6></div>
+              <p class="small text-muted tdc-m-0" style="line-height:1.6;">每到信用卡結帳日後，請至下方的「監控」分頁。您可以在這裡一覽本期各卡別的累積總額，確認無誤後點擊「一鍵進倉」，系統會自動將本月累積的所有明細，轉化為「航空哩程」或「通用積分」並收納至倉庫。若需手動調整某張卡的已刷卡額度，也可點擊進度條旁的「✏️ 編輯」直接覆寫。</p>
           </div>
-          <div class="p-3 mb-3" style="background-color: #f5f3ff; border-left: 5px solid #a855f7; border-radius: 12px;">
-              <div class="d-flex align-items-center mb-2"><span class="badge rounded-pill me-2" style="background:#a855f7; font-size:1rem;">4</span><h6 class="fw-bold m-0" style="color:#5b21b6;">雙引擎 AI 戰略與倉庫資產</h6></div>
-              <p class="small text-muted m-0" style="line-height:1.6;">前往頂部齒輪「設定」貼上 Google Gemini API Key，即可在「倉庫 > 兌換試算」頁面解鎖 AI 雙引擎！勾選您要動用的資產，您可以點擊「戰略紫」進行全域盲測，或點擊「精準藍」獲取包含開口、轉機與後續刷卡建議的神仙提案！</p>
+          <div class="p-3 tdc-mb-3" style="background-color: #f5f3ff; border-left: 5px solid #a855f7; border-radius: 12px;">
+              <div class="tdc-flex tdc-align-center tdc-mb-2"><span class="badge rounded-pill me-2" style="background:#a855f7; font-size:1rem;">4</span><h6 class="fw-bold tdc-m-0" style="color:#5b21b6;">雙引擎 AI 戰略與倉庫資產</h6></div>
+              <p class="small text-muted tdc-m-0" style="line-height:1.6;">前往頂部齒輪「設定」貼上 Google Gemini API Key，即可在「倉庫 > 兌換試算」頁面解鎖 AI 雙引擎！勾選您要動用的資產，您可以點擊「戰略紫」進行全域盲測，或點擊「精準藍」獲取包含開口、轉機與後續刷卡建議的神仙提案！</p>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 通用警告彈窗 -->
   <div class="modal fade" id="customAlertModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content text-center p-4 border-0 shadow-lg">
-        <svg class="lucide text-warning mb-3 mx-auto" style="width:3rem;height:3rem;"><use href="#icon-warn"/></svg>
+      <div class="modal-content tdc-text-center p-4 border-0 shadow-lg">
+        <svg class="lucide text-warning tdc-mb-3 mx-auto" style="width:3rem;height:3rem;"><use href="#icon-warn"/></svg>
         <p class="mb-4 fw-bold text-secondary" id="alert-msg" style="font-size: 1.05rem; line-height: 1.5;"></p>
         <button type="button" class="btn btn-primary rounded-pill px-5 mx-auto font-hand" data-bs-dismiss="modal">我知道了</button>
       </div>
@@ -633,12 +636,11 @@
   </div>
   
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  
   <script>
     /* ==========================================
-       TDC 航空累哩工具 v14.5 全球大滿貫版 - 核心 JS 運算引擎
+       TDC 航空累哩工具 v14.9 終極防禦版 - 核心 JS 運算引擎
        ========================================== */
-    const DB_KEY = 'MILES_APP_V14_0_PRO'; 
+    const DB_KEY = 'MILES_APP_V14_9'; 
     let currentResults = [];
     let plannerSelectedAssets = new Set(); 
 
@@ -659,6 +661,25 @@
         'taishin_cx': { target: '國泰航空', type: 'airline', ratio: 1, unitPoints:1, unitMiles:1 }
     };
 
+    const TRANSFER_DICT = {
+        '匯豐旅人積分': {
+            supported_partners: [
+                '中華航空', '長榮航空', '國泰航空(亞洲萬里通)', '新加坡航空', '日本航空(JAL)', '聯合航空(UA)', '卡達航空', 
+                '法國航空/荷蘭皇家航空', '加拿大航空', '越南航空', '海南航空', '亞洲航空(AirAsia)', 
+                '洲際酒店集團(IHG)', '雅高酒店集團(ALL Accor)', '萬豪旅享家(Marriott Bonvoy)'
+            ],
+            ratio: '1 點 = 1 哩/積分'
+        },
+        '匯豐Live+積分': {
+            supported_partners: [
+                '中華航空', '長榮航空', '國泰航空(亞洲萬里通)', '新加坡航空', '日本航空(JAL)', '聯合航空(UA)', '卡達航空', 
+                '法國航空/荷蘭皇家航空', '加拿大航空', '越南航空', '海南航空', '亞洲航空(AirAsia)', 
+                '洲際酒店集團(IHG)', '雅高酒店集團(ALL Accor)', '萬豪旅享家(Marriott Bonvoy)'
+            ],
+            ratio: '1 點 = 2 哩/積分 (系統已自動以 1:2 換算並併入匯豐旅人積分池中)'
+        }
+    };
+
     const DEFAULT_BILLING = { hsbc:6, ctbc:15, taishin:20, other:1 };
     
     const LIVE_KEYWORDS = { 
@@ -673,15 +694,26 @@
     const HSBC_LIVE_BLOCK = ['全聯','px','7-11','711','全家','萊爾富','ok超商','繳費','判決書','醫療','掛號','年費','手續費','賭博'];
     const TAISHIN_BLOCK = ['分期','全聯','px','7-11','711','全家','萊爾富','ok超商','繳費','國民年金','etag','三商美邦','麥當勞','肯德基'];
 
+    const ASIA_7_KEYWORDS = ['日本', '日幣', '日圓', 'jpy', 'tokyo', 'osaka', '新加坡', 'sgd', '馬來西亞', 'myr', '越南', 'vnd', '菲律賓', 'php', '印度', 'inr', '斯里蘭卡', 'lkr'];
+    const EU_UK_KEYWORDS = ['歐洲', '歐盟', '英國', '法國', '德國', '義大利', '西班牙', 'eur', 'gbp', 'london', 'paris'];
+
     // ==========================================
     // 1. 系統資料庫與基礎操作
     // ==========================================
     function loadDB() {
         const raw = localStorage.getItem(DB_KEY);
-        if(!raw) return { settings: { enabledBuiltins: ['hsbc_live','taishin_cx','ctbc_ci','hsbc_inf','ctbc_ci_inf'], billingDays: { ...DEFAULT_BILLING }, hsbc_autopay: true }, customCards: [], records: {}, limits: {}, warehouse: [] };
-        const db = JSON.parse(raw);
-        if(!db.records) db.records = {}; if(!db.warehouse) db.warehouse = []; if(!db.customCards) db.customCards = [];
-        return db;
+        const defaultDB = { settings: { enabledBuiltins: ['hsbc_live','taishin_cx','ctbc_ci','hsbc_inf','ctbc_ci_inf'], billingDays: { ...DEFAULT_BILLING }, hsbc_autopay: true }, customCards: [], records: {}, limits: {}, warehouse: [] };
+        if(!raw) return defaultDB;
+        try {
+            const db = JSON.parse(raw);
+            if(!db.records) db.records = {}; if(!db.warehouse) db.warehouse = []; if(!db.customCards) db.customCards = [];
+            if(!db.settings) db.settings = defaultDB.settings;
+            if(!db.settings.billingDays) db.settings.billingDays = { ...DEFAULT_BILLING };
+            return db;
+        } catch (e) {
+            console.error("資料庫解析失敗，已重置為預設狀態", e);
+            return defaultDB;
+        }
     }
     function saveDB(data) { localStorage.setItem(DB_KEY, JSON.stringify(data)); }
 
@@ -711,7 +743,7 @@
         }
     }
 
-    function clearInput(id) { const el = document.getElementById(id); el.value = ''; el.focus(); checkInputStyle(el); }
+    function clearInput(id) { const el = document.getElementById(id); el.value = ''; el.focus(); checkInputStyle(el); if(id === 'fx-rate-input') updateFxFeedback(); }
     function toggleNegative(id) { 
         const el = document.getElementById(id); let val = parseFloat(el.value);
         if(isNaN(val)) val = 0; el.value = val === 0 ? '-' : (val * -1); checkInputStyle(el);
@@ -720,12 +752,31 @@
         const val = parseFloat(el.value);
         if(val < 0) { el.classList.add('input-negative'); } else { el.classList.remove('input-negative'); }
     }
-    function toggleFxInput(val) { document.getElementById('fx-input-group').style.display = (val === 'FOREIGN') ? 'block' : 'none'; }
+    
+    function toggleFxInput(val) { 
+        document.getElementById('fx-input-group').style.display = (val === 'FOREIGN') ? 'block' : 'none'; 
+        document.getElementById('amount-label').innerHTML = (val === 'FOREIGN') ? '🌎 外幣消費金額' : '🇹🇼 消費金額 (TWD)';
+    }
+    
+    function updateFxFeedback() {
+        const inputVal = document.getElementById('fx-rate-input').value;
+        const feedbackBlock = document.getElementById('fx-feedback');
+        const realRateSpan = document.getElementById('fx-real-rate');
+        
+        if (inputVal && !isNaN(inputVal) && parseFloat(inputVal) > 0) {
+            const realRate = parseFloat(inputVal) * 1.015;
+            realRateSpan.innerText = realRate.toFixed(4);
+            feedbackBlock.style.display = 'block';
+        } else {
+            feedbackBlock.style.display = 'none';
+        }
+    }
+
     function updateKeywordPlaceholder() {
         const cat = document.getElementById('category').value;
         const input = document.getElementById('keyword-input');
         if(cat === 'flight_ci' || cat === 'flight_cx' || cat === 'flight_other') input.placeholder = '可留空或輸入航線 (如: TPE-NRT)';
-        else input.placeholder = '輸入店家關鍵字 (如: 麥當勞, Agoda)...';
+        else input.placeholder = '輸入店家關鍵字 (如: 麥當勞, Agoda, JPY, 日本)...';
     }
     function goToSettingsFromAI() { bootstrap.Modal.getInstance(document.getElementById('aiIntroModal')).hide(); setTimeout(openSettings, 400); }
 
@@ -763,35 +814,100 @@
 
     function renderSettingsCards() {
         const db = loadDB();
+        
         const builtinCon = document.getElementById('builtin-cards-list'); if(!builtinCon) return;
         builtinCon.innerHTML = '';
         BUILTIN_DEFS.forEach(def => {
             const isChecked = (db.settings.enabledBuiltins || []).includes(def.id) ? 'checked' : '';
-            builtinCon.innerHTML += `<label class="switch-group mb-2"><span class="switch-label">${def.name}</span><input class="form-check-input" type="checkbox" onchange="toggleBuiltin('${def.id}', this.checked)" ${isChecked}></label>`;
+            builtinCon.innerHTML += `<label class="switch-group tdc-mb-2"><span class="switch-label">${def.name}</span><input class="form-check-input" type="checkbox" onchange="toggleBuiltin('${def.id}', this.checked)" ${isChecked}></label>`;
         });
+
         const customCon = document.getElementById('custom-cards-list'); if(!customCon) return;
         customCon.innerHTML = '';
         (db.customCards || []).forEach((c, i) => {
-            customCon.innerHTML += `<div class="custom-card-item"><div class="fw-bold text-dark">${c.name} <span class="small text-muted ms-2">國$${c.domRate}/外$${c.forRate}</span></div><button class="btn btn-sm btn-outline-danger border-0 p-1" onclick="delCustomCard(${i})"><svg class="lucide"><use href="#icon-trash"/></svg></button></div>`;
+            let limitStr = (c.limitAmt && c.limitAmt > 0) ? `上限$${c.limitAmt.toLocaleString()}` : '無上限';
+            let cycleStr = c.isAnnual ? '年度結算' : `每月${c.billingDay||1}日結`;
+            customCon.innerHTML += `<div class="custom-card-item"><div class="fw-bold text-dark">${c.name} <span class="small text-muted ms-2">國$${c.domRate}/外$${c.forRate} (${limitStr}/${cycleStr})</span></div><button class="btn btn-sm btn-outline-danger border-0 p-1" onclick="delCustomCard(${i})"><svg class="lucide"><use href="#icon-trash"/></svg></button></div>`;
         });
+
+        const bDayCon = document.getElementById('billing-days-container');
+        if(bDayCon) {
+            let bHtml = '';
+            BUILTIN_DEFS.forEach(def => {
+                if((db.settings.enabledBuiltins || []).includes(def.id)) {
+                    if(['taishin_cx', 'ctbc_ci', 'ctbc_ci_inf'].includes(def.id)) {
+                        bHtml += `<div class="tdc-flex tdc-justify-between tdc-align-center tdc-mb-2"><span class="small fw-bold text-dark">${def.name}</span><span class="badge bg-secondary">年度結算</span></div>`;
+                    } else {
+                        let currentDay = db.settings.billingDays[def.id] || db.settings.billingDays[def.id.split('_')[0]] || 1;
+                        bHtml += `<div class="tdc-flex tdc-justify-between tdc-align-center tdc-mb-2"><span class="small fw-bold text-dark">${def.name}</span><select class="form-select form-select-sm w-auto rounded-pill" style="border-width: 2px;" onchange="updateBillingDay('${def.id}', this.value)">${Array.from({length:31}, (_, i)=>`<option value="${i+1}" ${i+1===currentDay?'selected':''}>每月 ${i+1} 日</option>`).join('')}</select></div>`;
+                    }
+                }
+            });
+            (db.customCards || []).forEach(c => {
+                if(c.isAnnual) {
+                    bHtml += `<div class="tdc-flex tdc-justify-between tdc-align-center tdc-mb-2"><span class="small fw-bold text-dark">${c.name}</span><span class="badge bg-secondary">年度結算</span></div>`;
+                } else {
+                    let currentDay = c.billingDay || 1;
+                    bHtml += `<div class="tdc-flex tdc-justify-between tdc-align-center tdc-mb-2"><span class="small fw-bold text-dark">${c.name}</span><select class="form-select form-select-sm w-auto rounded-pill" style="border-width: 2px;" onchange="updateCustomBillingDay('${c.id}', this.value)">${Array.from({length:31}, (_, i)=>`<option value="${i+1}" ${i+1===currentDay?'selected':''}>每月 ${i+1} 日</option>`).join('')}</select></div>`;
+                }
+            });
+            bDayCon.innerHTML = bHtml || '<div class="text-muted small">尚未啟用任何卡片</div>';
+        }
     }
-    function toggleBuiltin(id, isEnabled) { const db = loadDB(); if(isEnabled && !db.settings.enabledBuiltins.includes(id)) db.settings.enabledBuiltins.push(id); else if(!isEnabled) db.settings.enabledBuiltins = db.settings.enabledBuiltins.filter(x => x !== id); saveDB(db); }
-    function addCustomCard() { const name = prompt('自訂卡片名稱：'); if(!name) return; const dom = parseFloat(prompt('國內 $X/哩：', '10')); const fgn = parseFloat(prompt('海外 $X/哩：', '10')); if(isNaN(dom) || isNaN(fgn)) return alert('輸入無效，請輸入數字'); const db = loadDB(); db.customCards.push({ id:`custom_${Date.now()}`, name, domRate:dom, forRate:fgn }); saveDB(db); renderSettingsCards(); }
+
+    function toggleBuiltin(id, isEnabled) { const db = loadDB(); if(isEnabled && !db.settings.enabledBuiltins.includes(id)) db.settings.enabledBuiltins.push(id); else if(!isEnabled) db.settings.enabledBuiltins = db.settings.enabledBuiltins.filter(x => x !== id); saveDB(db); renderSettingsCards(); }
+    function updateBillingDay(id, day) { const db = loadDB(); if(!db.settings.billingDays) db.settings.billingDays={}; db.settings.billingDays[id] = parseInt(day); saveDB(db); }
+    function updateCustomBillingDay(id, day) { const db = loadDB(); const c = db.customCards.find(x=>x.id===id); if(c) c.billingDay = parseInt(day); saveDB(db); }
+    
+    function addCustomCard() { 
+        const name = prompt('自訂卡片名稱：'); if(!name) return; 
+        const dom = parseFloat(prompt('國內 $X/哩：', '10')); 
+        const fgn = parseFloat(prompt('海外 $X/哩：', '10')); 
+        if(isNaN(dom) || dom <= 0 || isNaN(fgn) || fgn <= 0) return alert('❌ 錯誤：兌換率必須是大於 0 的有效數字！');
+        let limitAmt = parseFloat(prompt('請輸入此卡的回饋/刷卡上限金額 (TWD)：\n(若無上限請輸入 0)', '0'));
+        if(isNaN(limitAmt) || limitAmt < 0) limitAmt = 0;
+
+        const isAnnual = confirm('【上限類型確認】\n這張自訂卡片是「年度回饋上限」嗎？\n\n• 按「確定」：設為年度歸零\n• 按「取消」：設為每月結帳日歸零');
+        let bDay = 1;
+        if (!isAnnual) {
+            bDay = parseInt(prompt('請輸入卡片結帳日 (1~31)：', '1'));
+            if(isNaN(bDay) || bDay < 1 || bDay > 31) return alert('輸入無效，請確認數字格式及範圍 (1-31)'); 
+        }
+
+        const db = loadDB(); 
+        db.customCards.push({ id: `custom_${Date.now()}`, name, domRate: dom, forRate: fgn, billingDay: bDay, isAnnual: isAnnual, limitAmt: limitAmt }); 
+        saveDB(db); renderSettingsCards(); 
+    }
+    
     function delCustomCard(idx) { if(confirm('確定刪除這張自訂卡片？')) { const db = loadDB(); db.customCards.splice(idx, 1); saveDB(db); renderSettingsCards(); } }
     function openSettings() { document.getElementById('gemini-key').value = localStorage.getItem('GEMINI_API_KEY') || ''; document.getElementById('github-token').value = localStorage.getItem('GITHUB_GIST_TOKEN') || ''; document.getElementById('setting-hsbc-autopay').checked = loadDB().settings.hsbc_autopay; renderSettingsCards(); new bootstrap.Modal(document.getElementById('settingsModal')).show(); }
     function saveSettings() { const key = document.getElementById('gemini-key').value.trim(); const git = document.getElementById('github-token').value.trim(); if(key) localStorage.setItem('GEMINI_API_KEY', key); else localStorage.removeItem('GEMINI_API_KEY'); if(git) localStorage.setItem('GITHUB_GIST_TOKEN', git); else localStorage.removeItem('GITHUB_GIST_TOKEN'); const db = loadDB(); db.settings.hsbc_autopay = document.getElementById('setting-hsbc-autopay').checked; saveDB(db); bootstrap.Modal.getInstance(document.getElementById('settingsModal')).hide(); showCustomAlert("✅ 系統設定已更新"); triggerSync(); }
     function openGuide() { new bootstrap.Modal(document.getElementById('guideModal')).show(); }
+
+    const formatMD = (str) => {
+        let safeStr = str ? String(str) : '';
+        return safeStr.replace(/\*\*(.*?)\*\*/g, '<strong class="text-primary-dark">$1</strong>').replace(/\n/g, '<br>');
+    };
 
     // ==========================================
     // 2. 上限管家與防護系統
     // ==========================================
     function getLimitKey(db, id, dateObj) {
         if(['taishin_cx', 'ctbc_ci', 'ctbc_ci_inf'].includes(id)) return `${dateObj.getFullYear()}-${id}`;
-        let day = db.settings?.billingDays?.[id.split('_')[0]] || 1;
+        if(id.startsWith('custom_')) {
+            const c = db.customCards.find(x => x.id === id);
+            if(c && c.isAnnual) return `${dateObj.getFullYear()}-${id}`;
+            let day = (c && c.billingDay) ? c.billingDay : 1;
+            const offset = dateObj.getDate() > day ? 1 : 0;
+            const d = new Date(dateObj.getFullYear(), dateObj.getMonth() + offset, 1);
+            return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${id}`;
+        }
+        let day = db.settings?.billingDays?.[id] || db.settings?.billingDays?.[id.split('_')[0]] || 1;
         const offset = dateObj.getDate() > day ? 1 : 0;
         const d = new Date(dateObj.getFullYear(), dateObj.getMonth() + offset, 1);
         return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${id}`;
     }
+    
     function getLimitVal(id) { 
         if(id==='hsbc_live') return 29600; 
         if(id==='hsbc_inf') return 999999999; 
@@ -802,7 +918,7 @@
     }
 
     // ==========================================
-    // 3. 核心運算引擎 (防溢位截斷版)
+    // 3. 核心運算引擎
     // ==========================================
     const CARD_RULES = {
         'ctbc_ci_inf': { 
@@ -818,7 +934,7 @@
 
                 if (isBonus) {
                     let limit = getLimitVal('ctbc_ci_inf');
-                    let used = ctx.db.limits[`${new Date().getFullYear()}-ctbc_ci_inf`]?.spend || 0;
+                    let used = ctx.db.limits[getLimitKey(ctx.db, 'ctbc_ci_inf', new Date())]?.spend || 0;
                     let remaining = Math.max(0, limit - used);
                     
                     if (ctx.twdBase <= remaining) {
@@ -838,13 +954,11 @@
         'hsbc_live': { 
             name: '匯豐 Live+', 
             calc: (ctx) => { 
-                if (ctx.isEUR) return { miles:0, note: '<span class="text-danger">🚫 歐盟實體不回饋</span>', consumedQuota:0 }; 
+                if (ctx.isEUR) return { miles:0, note: '<span class="text-danger">🚫 歐盟/英國實體店不回饋</span>', consumedQuota:0 }; 
                 if (HSBC_LIVE_BLOCK.some(w => ctx.kwKey.includes(w))) return { miles:0, note: '<span class="text-danger">🚫 非回饋項目</span>', consumedQuota:0 }; 
                 if (['apple_pay','line_pay'].includes(ctx.pay)) return { miles:0, note: '🚫 綁定行動支付無加碼', consumedQuota:0 }; 
 
-                const asianCountries = ['JPY', 'KRW', 'SGD', 'MYR', 'VND']; 
-                let isAsian5 = ctx.isForeign && asianCountries.includes(ctx.curr);
-
+                let isAsian7 = ctx.isForeign && ASIA_7_KEYWORDS.some(w => ctx.kwKey.includes(w));
                 let displayType = '一般 0.88%'; 
                 let basePts = ctx.twdBase * 0.0088; 
                 let bonusPts = 0;
@@ -880,11 +994,11 @@
                         }
                     } 
                     
-                    if(isAsian5) { 
+                    if(isAsian7) { 
                         let eligibleAsiaSpend = Math.min(ctx.twdBase, taskRemaining);
                         bonusPts += eligibleAsiaSpend * 0.01; 
                         actualQuotaConsumed = Math.max(actualQuotaConsumed, eligibleAsiaSpend);
-                        displayType = '亞洲五國 5.88%'; 
+                        displayType = '亞洲七國 5.88%'; 
                     } 
                 } else if(ctx.db.settings?.hsbc_autopay) { 
                     let eligibleTaskSpend = Math.min(ctx.twdBase, taskRemaining);
@@ -915,7 +1029,7 @@
                 else if (ctx.isFlyMode && ctx.cat !== 'flight_ci' && !isMobilePay && (['agoda','booking','klook'].some(w=>ctx.kwKey.includes(w)) || (ctx.isForeign && ctx.pay==='physical'))) { isBonus = true; }
 
                 let limit1M = getLimitVal('taishin_cx'); 
-                let used1M = ctx.db.limits[`${new Date().getFullYear()}-taishin_cx`]?.spend || 0;
+                let used1M = ctx.db.limits[getLimitKey(ctx.db, 'taishin_cx', new Date())]?.spend || 0;
                 let remaining1M = Math.max(0, limit1M - used1M);
                 let noteHtml = '';
                 
@@ -963,7 +1077,7 @@
 
                 if (isBonus) {
                     let limit = getLimitVal('ctbc_ci');
-                    let used = ctx.db.limits[`${new Date().getFullYear()}-ctbc_ci`]?.spend || 0;
+                    let used = ctx.db.limits[getLimitKey(ctx.db, 'ctbc_ci', new Date())]?.spend || 0;
                     let remaining = Math.max(0, limit - used);
 
                     if (ctx.twdBase <= remaining) return { miles: Math.trunc(ctx.twdBase / div), note: noteBase, consumedQuota: ctx.twdBase };
@@ -979,34 +1093,35 @@
             } 
         }
     };
-
     // ==========================================
-    // 4. 主計算邏輯與記帳系統
+    // 4. 主計算邏輯與記帳系統 (修復版)
     // ==========================================
     function calculate() {
         const db = loadDB(); const amt = parseFloat(document.getElementById('amount').value);
         if(isNaN(amt) || amt === 0) return showCustomAlert('請輸入消費金額！');
         
         const currType = document.getElementById('currency-type').value;
-        let twdBase = amt; let twdSpend = amt; let rate = 1;
+        let twdBase = amt; let twdSpend = amt;
 
         const fxBoard = document.getElementById('fx-calc-board');
         if (currType === 'FOREIGN') {
-            const rateInput = document.getElementById('fx-rate-input').value;
-            if(!rateInput) return showCustomAlert('請輸入當下外幣匯率！');
-            rate = parseFloat(rateInput); twdBase = Math.round(amt * rate); twdSpend = Math.round(twdBase * 1.015);
+            const rawRate = parseFloat(document.getElementById('fx-rate-input').value);
+            if(!rawRate) return showCustomAlert('請輸入當下的牌告匯率！');
+            
+            twdBase = Math.round(amt * rawRate);           
+            twdSpend = Math.round(amt * rawRate * 1.015);  
             
             fxBoard.innerHTML = `
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="text-secondary small fw-bold">外幣本金折合</span>
-                    <span class="text-dark fw-bold">NT$ ${Math.round(amt * rate).toLocaleString()}</span>
+                <div class="tdc-flex tdc-justify-between tdc-align-center tdc-mb-1">
+                    <span class="text-secondary small fw-bold">外幣本金折合 (回饋計算基準)</span>
+                    <span class="text-dark fw-bold">NT$ ${twdBase.toLocaleString()}</span>
                 </div>
-                <div class="d-flex justify-content-between align-items-center mb-1">
+                <div class="tdc-flex tdc-justify-between tdc-align-center tdc-mb-1">
                     <span class="text-secondary small fw-bold">1.5% 結匯手續費</span>
-                    <span class="text-danger fw-bold">+ NT$ ${Math.round(amt * rate * 0.015).toLocaleString()}</span>
+                    <span class="text-danger fw-bold">+ NT$ ${Math.round(twdBase * 0.015).toLocaleString()}</span>
                 </div>
                 <hr class="my-2" style="border-color: #e879f9; opacity: 0.3;">
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="tdc-flex tdc-justify-between tdc-align-center">
                     <span class="text-primary-dark fw-bold">預估總扣款金額</span>
                     <span class="text-primary-dark fs-5 fw-bold font-hand">NT$ ${twdSpend.toLocaleString()}</span>
                 </div>
@@ -1016,11 +1131,16 @@
             fxBoard.style.display = 'none';
         }
 
+        const kwKey = (document.getElementById('keyword-input').value || '').trim().toLowerCase();
+        const isForeign = (currType === 'FOREIGN');
+        const payMethod = document.getElementById('payment').value;
+        const isEUPhysical = isForeign && payMethod !== 'online' && EU_UK_KEYWORDS.some(w => kwKey.includes(w));
+
         const ctx = {
-            db: db, curr: currType==='FOREIGN'?'USD':'TWD', cat: document.getElementById('category').value,
-            pay: document.getElementById('payment').value, kwKey: (document.getElementById('keyword-input').value || '').trim().toLowerCase(),
+            db: db, curr: isForeign ? 'FOREIGN' : 'TWD', cat: document.getElementById('category').value,
+            pay: payMethod, kwKey: kwKey,
             isBirthday: document.getElementById('birthdayMode').checked, isFlyMode: document.getElementById('flyMode').checked,
-            isForeign: currType === 'FOREIGN', isEUR: false, twdBase: twdBase, twdSpend: twdSpend, isLiveSelect: false
+            isForeign: isForeign, isEUR: isEUPhysical, twdBase: twdBase, twdSpend: twdSpend, isLiveSelect: false
         };
 
         if(ctx.cat === 'dining') ctx.isLiveSelect = true;
@@ -1030,9 +1150,28 @@
         db.settings.enabledBuiltins.forEach(cardId => {
             if(CARD_RULES[cardId]) { const res = CARD_RULES[cardId].calc(ctx); currentResults.push({ id: cardId, name: CARD_RULES[cardId].name, ...res, twdSpend, twdBase }); }
         });
+        
         db.customCards.forEach(c => {
             let div = ctx.isForeign ? c.forRate : c.domRate;
-            currentResults.push({ id: c.id, name: c.name, miles: Math.trunc(ctx.twdBase/div), note: `自訂 $${div}/哩`, consumedQuota: ctx.twdBase, twdSpend, twdBase });
+            let miles = Math.trunc(ctx.twdBase/div);
+            let note = `自訂 $${div}/哩`;
+            let isWarning = false;
+            let consumedQuota = ctx.twdBase;
+
+            if (c.limitAmt && c.limitAmt > 0) {
+                let limitKey = getLimitKey(db, c.id, new Date());
+                let used = db.limits[limitKey]?.spend || 0;
+                let remaining = Math.max(0, c.limitAmt - used);
+
+                if (ctx.twdBase > remaining) {
+                    isWarning = true;
+                    let validSpend = remaining;
+                    miles = Math.trunc(validSpend / div); 
+                    note += `<span class="text-danger fw-bold d-block mt-1">⚠️ 額度已滿，超額部分無回饋</span>`;
+                    consumedQuota = validSpend;
+                }
+            }
+            currentResults.push({ id: c.id, name: c.name, miles: miles, note: note, consumedQuota: consumedQuota, isWarning: isWarning, twdSpend: ctx.twdSpend, twdBase: ctx.twdBase });
         });
         
         if (amt < 0) currentResults.sort((a,b) => a.miles - b.miles);
@@ -1047,35 +1186,28 @@
         list.forEach((c, idx) => {
             const isWinner = idx === 0 && !c.isWarning; 
             const integrityColor = '#10b981'; 
-            const integrityText = '🟢 數據已核實';
-
-            let linkHtml = '';
-            if(c.id.includes('ctbc_ci')) linkHtml += `<a href="https://www.china-airlines.com/tw/zh/member/airline-miles/index" target="_blank" class="btn-airline-link">🌸 華航兌換</a>`;
-            if(c.id === 'taishin_cx') linkHtml += `<a href="https://flights.cathaypacific.com/zh_TW/offers/redeem-flights.html" target="_blank" class="btn-airline-link" style="border-color:#86efac; color:#166534; background:#f0fdf4;">🌲 國泰兌換</a>`;
             
-            if(c.id.includes('hsbc') || c.name.toUpperCase().includes('ANA') || c.name.includes('全日空')) {
-                if(c.id.includes('hsbc')) {
-                    linkHtml += `<a href="https://www.hsbc.com.tw/credit-cards/rewards/travel/" target="_blank" class="btn-airline-link" style="border-color:#fca5a5; color:#dc2626; background:#fef2f2;">🏛️ 匯豐轉點</a>`;
-                }
-                linkHtml += `<a href="https://www.ana.co.jp/zh/tw/amc/reference/tukau/award/int/terms.html" target="_blank" class="btn-airline-link" style="border-color:#bfdbfe; color:#1d4ed8; background:#eff6ff;">✈️ ANA 本家</a>`;
-                linkHtml += `<a href="https://www.ana.co.jp/zh/tw/amc/reference/tukau/award/tk/terms.html" target="_blank" class="btn-airline-link" style="border-color:#fde047; color:#854d0e; background:#fef9c3;">🌟 ANA 星盟</a>`;
+            let trueCostHtml = '';
+            if (c.miles > 0) {
+                let trueCost = (c.twdSpend / c.miles).toFixed(2);
+                trueCostHtml = `<span class="badge bg-light text-secondary border mt-1" style="font-size:0.7rem;">實質成本 $${trueCost}/哩</span>`;
             }
 
             const div = document.createElement('div'); div.className = `plan-card ${isWinner ? 'plan-winner' : ''} ${c.isWarning ? 'plan-warning' : ''}`;
             div.innerHTML = `
             ${isWinner ? '<span class="winner-badge">最佳選擇</span>' : ''}
-            <div class="d-flex justify-content-between align-items-start">
+            <div class="tdc-flex tdc-justify-between align-items-start">
                 <div>
                     <h4 class="card-name">${c.name}</h4>
                     <div class="text-muted small font-hand mt-1">${c.note}</div>
+                    ${trueCostHtml}
                 </div>
-                <div class="text-end flex-shrink-0 ms-2">
+                <div class="tdc-text-end flex-shrink-0 ms-2">
                     <div class="card-miles">${c.miles.toLocaleString()} <small style="font-size:0.5em">哩</small></div>
-                    <div class="integrity-badge" style="background:${integrityColor}15; color:${integrityColor}; border:1px solid ${integrityColor}40;">${integrityText}</div>
+                    <div class="integrity-badge" style="background:${integrityColor}15; color:${integrityColor}; border:1px solid ${integrityColor}40;">🟢 數據已核實</div>
                 </div>
             </div>
-            ${linkHtml ? `<div class="link-row mt-2 pt-2 border-top border-light">${linkHtml}</div>` : ''}
-            <div class="d-flex gap-2 mt-3">
+            <div class="tdc-flex gap-2 mt-3">
                 <button class="btn-card-action ${isWinner?'btn-record-win':''}" onclick="recordTx(${idx})">記帳</button>
                 <button class="btn-card-action btn-manual-adjust" onclick="openManualAdjust(${idx})">修正</button>
             </div>`;
@@ -1089,16 +1221,27 @@
         if(!db.records[monthKey]) db.records[monthKey] = {}; const txId = `tx_${Date.now()}`;
         
         let unitText = '哩'; let points = item.miles;
-        if(item.id==='hsbc_live') { points = isManual ? item.miles : Math.trunc(item.miles/2); unitText='積分'; }
-        else if(item.id==='hsbc_inf') { unitText='積分'; }
+        if(item.id === 'hsbc_live') { points = Math.trunc(item.miles / 2); unitText = '積分'; } 
+        else if(item.id === 'hsbc_inf') { unitText = '積分'; }
 
         let kwNote = document.getElementById('keyword-input').value || '一般消費';
         if(isManual) kwNote += ` (微調: 原算 ${originalMiles})`;
         if(item.twdBase < 0) kwNote = `(退刷) ${kwNote}`;
 
-        db.records[monthKey][txId] = { id: item.id, name: item.name, spend: item.twdBase, consumedQuota: item.consumedQuota, miles: points, unit: unitText, note: kwNote };
-
         const limitKey = getLimitKey(db, item.id, now);
+
+        db.records[monthKey][txId] = { 
+            id: item.id, 
+            name: item.name, 
+            spend: item.twdBase, 
+            consumedQuota: item.consumedQuota, 
+            miles: points, 
+            unit: unitText, 
+            note: kwNote,
+            createdAt: Date.now(),
+            limitKey: limitKey
+        };
+
         if(!db.limits[limitKey]) db.limits[limitKey] = { spend:0, points:0 };
         let qToConsume = item.consumedQuota !== undefined ? item.consumedQuota : item.twdBase;
         if(qToConsume !== 0) { db.limits[limitKey].spend += qToConsume; }
@@ -1110,53 +1253,32 @@
     }
 
     function openManualAdjust(idx) {
-        const item = currentResults[idx];
-        document.getElementById('manual-adjust-val').value = item.miles;
-        document.getElementById('manual-adjust-idx').value = idx;
-        new bootstrap.Modal(document.getElementById('manualAdjustModal')).show();
+        const item = currentResults[idx]; document.getElementById('manual-adjust-val').value = item.miles;
+        document.getElementById('manual-adjust-idx').value = idx; new bootstrap.Modal(document.getElementById('manualAdjustModal')).show();
     }
 
     function confirmManualAdjust() {
-        const idx = document.getElementById('manual-adjust-idx').value;
-        const manualVal = parseFloat(document.getElementById('manual-adjust-val').value);
+        const idx = document.getElementById('manual-adjust-idx').value; const manualVal = parseFloat(document.getElementById('manual-adjust-val').value);
         if(isNaN(manualVal)) return showCustomAlert('請輸入有效的數字！');
         const item = currentResults[idx]; const originalMiles = item.miles; item.miles = manualVal;
-        bootstrap.Modal.getInstance(document.getElementById('manualAdjustModal')).hide();
-        recordTx(idx, true, originalMiles);
+        bootstrap.Modal.getInstance(document.getElementById('manualAdjustModal')).hide(); recordTx(idx, true, originalMiles);
     }
 
     // ==========================================
-    // 5. 監控總帳、編輯額度與明細管理
+    // 5. 總帳、編輯額度與明細管理 (修復版)
     // ==========================================
-    function openEditLimit(id) {
-        document.getElementById('edit-limit-id').value = id;
-        document.getElementById('edit-limit-val').value = '';
-        new bootstrap.Modal(document.getElementById('editLimitModal')).show();
-    }
-
-    function confirmEditLimit() {
-        const id = document.getElementById('edit-limit-id').value;
-        let val = parseFloat(document.getElementById('edit-limit-val').value);
-        if(isNaN(val) || val < 0) val = 0;
-        const db = loadDB(); const now = new Date(); const limitKey = getLimitKey(db, id, now);
-        if(!db.limits[limitKey]) db.limits[limitKey] = { spend:0, points:0 };
-        db.limits[limitKey].spend = val; 
-        saveDB(db); bootstrap.Modal.getInstance(document.getElementById('editLimitModal')).hide();
-        renderStatus(); showCustomAlert('✅ 卡片額度已成功手動覆寫！');
-    }
-
     function renderStatus() {
         const db = loadDB(); const now = new Date(); const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
         const data = db.records[monthKey] || {}; const agg = {};
         for(let key in data) { const r = data[key]; if(!agg[r.id]) agg[r.id] = { name: r.name, spend: 0, miles: 0, unit: r.unit }; agg[r.id].spend += r.spend; agg[r.id].miles += r.miles; }
         
         const statusCon = document.getElementById('status-container'); if(!statusCon) return;
-        if(Object.keys(agg).length === 0) statusCon.innerHTML = '<div class="text-center py-3 text-muted font-hand fw-bold">本月尚無累積</div>';
+        if(Object.keys(agg).length === 0) statusCon.innerHTML = '<div class="tdc-text-center py-3 text-muted font-hand fw-bold">本月尚無累積</div>';
         else {
             let h = '';
             for(let id in agg) {
                 const item = agg[id];
-                h += `<div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom"><div><div class="fw-bold text-dark mb-1">${item.name}</div><div class="text-muted small">$${item.spend.toLocaleString()}</div></div><div class="text-primary fw-bold fs-5">${item.miles.toLocaleString()} <small class="text-muted" style="font-size:0.6em">${item.unit}</small></div></div>`;
+                h += `<div class="tdc-flex tdc-justify-between tdc-align-center tdc-mb-3 pb-3 border-bottom"><div><div class="fw-bold text-dark tdc-mb-1">${item.name}</div><div class="text-muted small">$${item.spend.toLocaleString()}</div></div><div class="text-primary fw-bold fs-5">${item.miles.toLocaleString()} <small class="text-muted" style="font-size:0.6em">${item.unit}</small></div></div>`;
             }
             statusCon.innerHTML = h;
         }
@@ -1167,18 +1289,38 @@
             const limit = getLimitVal(id); if (limit >= 999999999) return;
             const def = BUILTIN_DEFS.find(d=>d.id===id);
             const lKey = getLimitKey(db, id, now); const curr = db.limits[lKey] ? db.limits[lKey].spend : 0; const pct = Math.min(100, Math.max(0, (curr/limit)*100));
-            lh += `<div class="mb-3">
-                <div class="d-flex justify-content-between align-items-center small mb-1">
+            lh += `<div class="tdc-mb-3">
+                <div class="tdc-flex tdc-justify-between tdc-align-center small tdc-mb-1">
                     <strong>${def?def.name:id}</strong>
-                    <div class="d-flex align-items-center gap-2">
-                        <span>$${curr.toLocaleString()} / $${limit.toLocaleString()}</span>
-                        <button class="btn-edit-limit" title="修改進度" onclick="openEditLimit('${id}')"><svg class="lucide"><use href="#icon-pen"/></svg></button>
-                    </div>
+                    <div class="tdc-flex tdc-align-center gap-2"><span>$${curr.toLocaleString()} / $${limit.toLocaleString()}</span><button class="btn-edit-limit" title="修改進度" onclick="openEditLimit('${id}')"><svg class="lucide"><use href="#icon-pen"/></svg></button></div>
                 </div>
                 <div class="progress" style="height:8px; background-color:#fef3c7;">
                     <div class="progress-bar ${pct>80?'bg-danger':'bg-warning'}" style="width:${pct}%"></div>
                 </div>
             </div>`;
+        });
+
+        (db.customCards || []).forEach(c => {
+            const lKey = getLimitKey(db, c.id, now); const curr = db.limits[lKey] ? db.limits[lKey].spend : 0;
+            if (c.limitAmt && c.limitAmt > 0) {
+                const pct = Math.min(100, Math.max(0, (curr/c.limitAmt)*100));
+                lh += `<div class="tdc-mb-3">
+                    <div class="tdc-flex tdc-justify-between tdc-align-center small tdc-mb-1">
+                        <strong>${c.name} <span class="text-muted">(自訂${c.isAnnual?'年':'月'})</span></strong>
+                        <div class="tdc-flex tdc-align-center gap-2"><span>$${curr.toLocaleString()} / $${c.limitAmt.toLocaleString()}</span><button class="btn-edit-limit" title="修改進度" onclick="openEditLimit('${c.id}')"><svg class="lucide"><use href="#icon-pen"/></svg></button></div>
+                    </div>
+                    <div class="progress" style="height:8px; background-color:#fef3c7;">
+                        <div class="progress-bar ${pct>80?'bg-danger':'bg-warning'}" style="width:${pct}%"></div>
+                    </div>
+                </div>`;
+            } else {
+                lh += `<div class="tdc-mb-3">
+                    <div class="tdc-flex tdc-justify-between tdc-align-center small tdc-mb-1">
+                        <strong>${c.name} <span class="text-muted">(自訂無上限)</span></strong>
+                        <div class="tdc-flex tdc-align-center gap-2"><span>已刷 $${curr.toLocaleString()}</span><button class="btn-edit-limit" title="修改進度" onclick="openEditLimit('${c.id}')"><svg class="lucide"><use href="#icon-pen"/></svg></button></div>
+                    </div>
+                </div>`;
+            }
         });
         limitsCon.innerHTML = lh || '<div class="text-muted small">目前主力卡皆為無上限</div>';
     }
@@ -1189,32 +1331,31 @@
         const groups = {}; let count = 0;
         for(let key in data) { const r = data[key]; if(!groups[r.name]) groups[r.name] = []; groups[r.name].push({ ...r, key }); count++; }
         
-        document.getElementById('nav-badge-list').innerText = count;
-        document.getElementById('nav-badge-list').style.display = count > 0 ? 'inline-block' : 'none';
+        document.getElementById('nav-badge-list').innerText = count; document.getElementById('nav-badge-list').style.display = count > 0 ? 'inline-block' : 'none';
         document.getElementById('pending-count').innerText = `${count} 筆`;
 
-        if(count === 0) { con.innerHTML = '<div class="text-center text-muted py-5 font-hand fw-bold">本月目前沒有待結算的紀錄</div>'; return; }
+        if(count === 0) { con.innerHTML = '<div class="tdc-text-center text-muted py-5 font-hand fw-bold">本月目前沒有待結算的紀錄</div>'; return; }
 
         for(let name in groups) {
-            let html = `<div class="card-box p-0 mb-3 overflow-hidden"><div class="bg-light p-2 fw-bold text-primary px-3 border-bottom">${name}</div><div>`;
+            let html = `<div class="card-box p-0 tdc-mb-3 overflow-hidden"><div class="bg-light p-2 fw-bold text-primary px-3 border-bottom">${name}</div><div>`;
             groups[name].forEach(item => {
+                let dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString() : new Date(parseInt(item.key.split('_')[1] || Date.now())).toLocaleDateString();
                 html += `
-                <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+                <div class="tdc-flex tdc-justify-between tdc-align-center p-3 border-bottom">
                     <div>
                         <div class="fw-bold ${item.spend<0?'text-danger':'text-dark'}">${item.note}</div>
-                        <div class="text-muted" style="font-size:0.7rem;">${new Date(parseInt(item.key.split('_')[1])).toLocaleDateString()}</div>
+                        <div class="text-muted" style="font-size:0.7rem;">${dateStr}</div>
                     </div>
-                    <div class="d-flex align-items-center">
-                        <div class="text-end me-3">
+                    <div class="tdc-flex tdc-align-center">
+                        <div class="tdc-text-end me-3">
                             <div class="${item.spend<0?'text-danger':''} fw-bold">$${item.spend.toLocaleString()}</div>
                             <div class="text-primary small font-hand">${item.miles>0?'+':''}${item.miles} ${item.unit}</div>
                         </div>
-                        <button class="btn btn-sm btn-outline-danger rounded-circle p-1" onclick="delTx('${monthKey}','${item.key}')"><svg class="lucide"><use href="#icon-trash"/></svg></button>
+                        <button class="btn btn-sm btn-outline-danger rounded-circle p-1 tdc-flex" onclick="delTx('${monthKey}','${item.key}')"><svg class="lucide" style="width:14px;height:14px;"><use href="#icon-trash"/></svg></button>
                     </div>
                 </div>`;
             });
-            html += '</div></div>';
-            con.innerHTML += html;
+            html += '</div></div>'; con.innerHTML += html;
         }
     }
 
@@ -1222,22 +1363,23 @@
         if(!confirm('確定要刪除這筆紀錄嗎？\n（同時會退還該卡片的累積額度）')) return;
         const db = loadDB(); const rec = db.records[monthKey][txId];
         if(rec) { 
-            const limitKey = getLimitKey(db, rec.id, new Date()); 
+            const limitKey = rec.limitKey || getLimitKey(db, rec.id, new Date(parseInt(txId.split('_')[1] || Date.now()))); 
             let qToRestore = rec.consumedQuota !== undefined ? rec.consumedQuota : rec.spend;
             if(db.limits[limitKey]) { db.limits[limitKey].spend -= qToRestore; if(db.limits[limitKey].spend < 0) db.limits[limitKey].spend = 0; } 
             delete db.records[monthKey][txId]; saveDB(db); renderList(); renderStatus();
         }
     }
 
-    function clearCurrentStats() { 
+    function clearCurrentStats() {
         if(!confirm('⚠️ 確定要重置本期所有數據嗎？\n（這會將本月相關的額度全部退還）')) return;
         const db = loadDB(); const now = new Date(); const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-        if(db.records[monthKey]) { 
-            for(let id in db.records[monthKey]) { 
-                const rec = db.records[monthKey][id]; const limitKey = getLimitKey(db, rec.id, now); 
+        if(db.records[monthKey]) {
+            for(let txId in db.records[monthKey]) {
+                const rec = db.records[monthKey][txId];
+                const lKey = rec.limitKey || getLimitKey(db, rec.id, now);
                 let qToRestore = rec.consumedQuota !== undefined ? rec.consumedQuota : rec.spend;
-                if(db.limits[limitKey]) { db.limits[limitKey].spend -= qToRestore; if(db.limits[limitKey].spend < 0) db.limits[limitKey].spend = 0; } 
-            } 
+                if(db.limits[lKey]) { db.limits[lKey].spend -= qToRestore; if(db.limits[lKey].spend < 0) db.limits[lKey].spend = 0; }
+            }
             db.records[monthKey] = {}; saveDB(db); renderStatus(); renderList();
         }
     }
@@ -1248,55 +1390,97 @@
         const data = db.records[monthKey]; if(!data) return;
         for(let k in data) {
             const r = data[k]; const rule = AUTO_ASSETS[r.id];
-            if(rule) { let asset = db.warehouse.find(a => a.targetAirline === rule.target); if(!asset) { asset = { type: rule.type, targetAirline: rule.target, name: rule.target, current: 0, unitPoints:rule.unitPoints, unitMiles:rule.unitMiles, bonusReq:0, bonusGive:0 }; db.warehouse.push(asset); } asset.current += r.miles; }
+            if(rule) {
+                let asset = db.warehouse.find(a => a.targetAirline === rule.target && a.type === rule.type);
+                if(!asset) { asset = { type: rule.type, targetAirline: rule.target, name: rule.target, current: 0, unitPoints:rule.unitPoints, unitMiles:rule.unitMiles, bonusReq:0, bonusGive:0 }; db.warehouse.push(asset); }
+                asset.current += r.miles;
+            }
         }
-        db.records[monthKey] = {}; saveDB(db); renderStatus(); renderList(); showCustomAlert('✅ 已全部入庫！');
+        db.records[monthKey] = {}; saveDB(db); renderStatus(); renderList(); renderWarehouse(); showCustomAlert('✅ 已全部入庫！');
     }
 
+    function confirmEditLimit() {
+        const id = document.getElementById('edit-limit-id').value;
+        let val = parseFloat(document.getElementById('edit-limit-val').value);
+        if(isNaN(val) || val < 0) val = 0;
+        const db = loadDB(); const now = new Date(); const limitKey = getLimitKey(db, id, now);
+        if(!db.limits[limitKey]) db.limits[limitKey] = { spend:0, points:0 };
+        db.limits[limitKey].spend = val;
+        saveDB(db); bootstrap.Modal.getInstance(document.getElementById('editLimitModal')).hide();
+        renderStatus(); showCustomAlert('✅ 卡片額度已成功手動覆寫！');
+    }
+    
+    function openEditLimit(id) {
+        document.getElementById('edit-limit-id').value = id;
+        document.getElementById('edit-limit-val').value = '';
+        new bootstrap.Modal(document.getElementById('editLimitModal')).show();
+    }
+
+    // ==========================================
+    // 6. 倉庫管理 2.0 (三位一體)
+    // ==========================================
     function renderWarehouse() {
         const db = loadDB(); const con = document.getElementById('warehouse-list'); if(!con) return; con.innerHTML = '';
         const chkCon = document.getElementById('planner-asset-container'); if(chkCon) chkCon.innerHTML = '';
-        let totalVal = 0;
         
         db.warehouse.forEach((item, idx) => {
-            let miles = 0;
+            let miles = 0; let displaySubText = '';
+            
             if(item.type === 'transfer') {
                 let baseMiles = Math.trunc(item.current * (item.unitMiles/item.unitPoints));
                 let bonusMiles = (item.bonusReq > 0) ? Math.trunc(item.current / item.bonusReq) * (item.bonusGive || 0) : 0;
                 miles = baseMiles + bonusMiles;
-            } else { miles = item.current; }
+                displaySubText = `<div class="tdc-text-end text-success fw-bold small mt-1">≅ ${miles.toLocaleString()} 哩</div>`;
+            } else if(item.type === 'airline') {
+                miles = item.current;
+            } else if(item.type === 'raw') {
+                miles = 0; displaySubText = `<div class="tdc-text-end text-muted fw-bold small mt-1">⚠️ 通用積分 (不參與 AI 換算)</div>`;
+            }
 
-            totalVal += miles;
             con.innerHTML += `
-            <div class="airline-group-card mb-3">
+            <div class="airline-group-card tdc-mb-3">
                 <div class="airline-header">
                     <div class="fw-bold fs-5 text-primary-dark">${item.name}</div>
-                    <button class="btn btn-sm btn-outline-danger rounded-circle p-1" onclick="delWarehouseAsset(${idx})"><svg class="lucide" style="width:16px;height:16px;"><use href="#icon-trash"/></svg></button>
+                    <button class="btn btn-sm btn-outline-danger rounded-circle p-1 tdc-flex" onclick="delWarehouseAsset(${idx})"><svg class="lucide" style="width:14px;height:14px;"><use href="#icon-trash"/></svg></button>
                 </div>
                 <div class="p-3 bg-white">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="text-muted small">${item.type==='transfer'?'轉點積分':'航空哩程'}</div>
+                    <div class="tdc-flex tdc-justify-between tdc-align-center">
+                        <div class="text-muted small">${item.type==='transfer'?'換算試算池':item.type==='raw'?'靜態通用點數':'航空哩程'}</div>
                         <div class="fs-4 fw-bold font-hand text-dark">${item.current.toLocaleString()}</div>
                     </div>
-                    ${item.type==='transfer'?`<div class="text-end text-success fw-bold small mt-1">≅ ${miles.toLocaleString()} 哩</div>`:''}
+                    ${displaySubText}
                 </div>
             </div>`;
             
-            if(chkCon) {
+            if(chkCon && item.type !== 'raw') {
                 const isChecked = plannerSelectedAssets.has(idx) ? 'checked' : '';
-                chkCon.innerHTML += `<label class="switch-group mb-2"><span class="switch-label text-dark">${item.name} <small class="text-muted">(${miles.toLocaleString()}哩)</small></span><input class="form-check-input" type="checkbox" onchange="togglePlannerAsset(${idx}, this.checked)" ${isChecked}></label>`;
+                chkCon.innerHTML += `<label class="switch-group tdc-mb-2"><span class="switch-label text-dark">${item.name} <small class="text-secondary">(${miles.toLocaleString()}哩)</small></span><input class="form-check-input" type="checkbox" onchange="togglePlannerAsset(${idx}, this.checked)" ${isChecked}></label>`;
             }
         });
-        
-        if(db.warehouse.length === 0) { con.innerHTML = '<div class="text-center py-5 text-muted font-hand fw-bold">倉庫空空如也</div>'; }
+        if(db.warehouse.length === 0) { con.innerHTML = '<div class="tdc-text-center py-5 text-muted font-hand fw-bold">倉庫空空如也</div>'; }
     }
 
     function addNativeAsset() {
         const name = document.getElementById('native-airline-name').value.trim(); const qty = parseInt(document.getElementById('native-current').value);
         if(!name || isNaN(qty) || qty <= 0) return showCustomAlert('請填寫完整資訊');
-        const db = loadDB(); let asset = db.warehouse.find(a => a.targetAirline === name);
-        if(!asset) { asset = { type: 'airline', targetAirline: name, name: name, current: 0, unitPoints: 1, unitMiles: 1, bonusReq:0, bonusGive:0 }; db.warehouse.push(asset); }
-        asset.current += qty; saveDB(db); clearInput('native-airline-name'); clearInput('native-current'); renderWarehouse(); showCustomAlert('✅ 存入成功！');
+        const db = loadDB(); 
+        let exactAsset = db.warehouse.find(a => a.type === 'airline' && a.targetAirline === name);
+        if (!exactAsset) {
+            let similarAsset = db.warehouse.find(a => a.type === 'airline' && (a.targetAirline.includes(name) || name.includes(a.targetAirline)));
+            if (similarAsset && confirm(`系統偵測到相似的航空資產「${similarAsset.targetAirline}」，是否要進行歸戶合併？\n(若選取消，將建立獨立新帳戶)`)) exactAsset = similarAsset;
+        }
+        if(!exactAsset) { exactAsset = { type: 'airline', targetAirline: name, name: name, current: 0, unitPoints: 1, unitMiles: 1, bonusReq:0, bonusGive:0 }; db.warehouse.push(exactAsset); }
+        exactAsset.current += qty; saveDB(db); 
+        clearInput('native-airline-name'); clearInput('native-current'); renderWarehouse(); showCustomAlert('✅ 航空哩程存入成功！');
+    }
+
+    function addRawAsset() {
+        const name = document.getElementById('raw-point-name').value.trim(); const qty = parseInt(document.getElementById('raw-point-current').value);
+        if(!name || isNaN(qty) || qty <= 0) return showCustomAlert('請填寫完整資訊');
+        const db = loadDB(); let asset = db.warehouse.find(a => a.type === 'raw' && a.name === name);
+        if(!asset) { asset = { type: 'raw', targetAirline: '無', name: name, current: 0, unitPoints: 1, unitMiles: 1, bonusReq:0, bonusGive:0 }; db.warehouse.push(asset); }
+        asset.current += qty; saveDB(db); 
+        clearInput('raw-point-name'); clearInput('raw-point-current'); renderWarehouse(); showCustomAlert('✅ 通用積分存入成功！');
     }
 
     function addTransferAsset() {
@@ -1305,26 +1489,31 @@
         const uPts = parseFloat(document.getElementById('trans-unit-points').value); const uMis = parseFloat(document.getElementById('trans-unit-miles').value);
         if(!name || isNaN(qty) || qty <= 0 || !tgt || isNaN(uPts) || isNaN(uMis)) return showCustomAlert('請填寫基礎轉換資訊！');
         
-        let bonusReq = parseFloat(document.getElementById('trans-bonus-req').value) || 0;
-        let bonusGive = parseFloat(document.getElementById('trans-bonus-give').value) || 0;
-
-        const db = loadDB(); let asset = db.warehouse.find(a => a.name === name);
+        let bonusReq = parseFloat(document.getElementById('trans-bonus-req').value) || 0; let bonusGive = parseFloat(document.getElementById('trans-bonus-give').value) || 0;
+        const db = loadDB(); let asset = db.warehouse.find(a => a.type === 'transfer' && a.name === name);
         if(!asset) { asset = { type: 'transfer', targetAirline: tgt, name: name, current: 0, unitPoints: uPts, unitMiles: uMis, bonusReq, bonusGive }; db.warehouse.push(asset); }
         if(bonusReq > 0) { asset.bonusReq = bonusReq; asset.bonusGive = bonusGive; }
         asset.current += qty; saveDB(db); 
         clearInput('trans-source-name'); clearInput('trans-current'); clearInput('trans-target-airline'); clearInput('trans-unit-points'); clearInput('trans-unit-miles'); clearInput('trans-bonus-req'); clearInput('trans-bonus-give');
-        renderWarehouse(); showCustomAlert('✅ 存入成功！');
+        renderWarehouse(); showCustomAlert('✅ 試算資產存入成功！');
     }
 
-    function delWarehouseAsset(idx) { if(confirm('確定要刪除這筆資產嗎？')) { const db = loadDB(); db.warehouse.splice(idx, 1); plannerSelectedAssets.delete(idx); saveDB(db); renderWarehouse(); } }
+    function delWarehouseAsset(idx) { 
+        if(confirm('確定要刪除這筆資產嗎？')) { 
+            const db = loadDB(); db.warehouse.splice(idx, 1); 
+            const newSet = new Set(); plannerSelectedAssets.forEach(val => { if (val < idx) newSet.add(val); else if (val > idx) newSet.add(val - 1); });
+            plannerSelectedAssets = newSet; saveDB(db); renderWarehouse(); 
+        } 
+    }
+    
     function togglePlannerAsset(idx, isChecked) { if(isChecked) plannerSelectedAssets.add(idx); else plannerSelectedAssets.delete(idx); runPlannerCalc(); } 
 
     // ==========================================
-    // 6. AI 雙引擎、規劃器與動態卡包掃描 (v14.5 全球航區升級)
+    // 7. AI 雙引擎大腦 (安全防護版)
     // ==========================================
     function togglePlannerTrip() {
         const isRt = document.getElementById('planner-trip-type').checked;
-        document.getElementById('trip-label').innerText = isRt ? '來回 (Round-trip)' : '單程 (One-way)';
+        document.getElementById('trip-label').innerText = isRt ? '來回 (Round)' : '單程 (One-way)';
         runPlannerCalc();
     }
 
@@ -1333,7 +1522,6 @@
         const isRt = document.getElementById('planner-trip-type').checked;
         const cls = document.getElementById('planner-class').value;
         
-        // v14.5 全球大滿貫版：基礎哩程階梯演算法
         let baseMiles = 10000;
         switch(to) {
             case 'TW': baseMiles = 5000; break;
@@ -1341,31 +1529,28 @@
             case 'CN': baseMiles = 15000; break;
             case 'NE_ASIA': baseMiles = 10000; break;
             case 'SE_ASIA': baseMiles = 15000; break;
-            case 'S_ASIA': baseMiles = 25000; break;     // 南亞/馬爾地夫
-            case 'OCEANIA': baseMiles = 30000; break;    // 大洋洲/關島
+            case 'S_ASIA': baseMiles = 25000; break;     
+            case 'OCEANIA': baseMiles = 30000; break;    
             case 'NA_W': case 'NA_E': case 'EU': baseMiles = 35000; break;
-            case 'AFRICA': baseMiles = 40000; break;     // 非洲
-            case 'S_AMERICA': baseMiles = 55000; break;  // 南美洲
+            case 'AFRICA': baseMiles = 40000; break;     
+            case 'S_AMERICA': baseMiles = 55000; break;  
         }
-        
-        if (cls === 'C') baseMiles *= 2;
-        if (cls === 'F') baseMiles *= 3;
-        if (isRt) baseMiles *= 2;
+        if (cls === 'C') baseMiles *= 2; if (cls === 'F') baseMiles *= 3; if (isRt) baseMiles *= 2;
 
         let html = `
-            <div class="card-box mt-3 text-center" style="background: #fdfdfd; border-color: #e2e8f0;">
-                <div class="text-muted small fw-bold mb-1">區域制預估所需</div>
+            <div class="card-box mt-3 tdc-text-center" style="background: #fdfdfd; border-color: #e2e8f0;">
+                <div class="text-muted small fw-bold tdc-mb-1">區域制預估所需</div>
                 <div class="fs-2 fw-bold text-primary font-hand">${baseMiles.toLocaleString()} <small class="text-muted fs-6">哩</small></div>
                 <div class="small text-secondary mt-2">※ 實際需求受聯盟兌換表與淡旺季影響，建議使用 AI 雙引擎進行精算。</div>
             </div>
         `;
-
+        
         const db = loadDB();
         let selectedCount = 0;
-        let assetHtml = '<div class="mt-3"><h6 class="fw-bold text-secondary mb-2 d-flex align-items-center"><svg class="lucide me-1"><use href="#icon-target"/></svg>選定資產達成狀態</h6>';
+        let assetHtml = '<div class="mt-3"><h6 class="fw-bold text-secondary tdc-mb-2 tdc-flex tdc-align-center"><svg class="lucide me-1"><use href="#icon-target"/></svg>選定資產達成狀態</h6>';
 
         db.warehouse.forEach((item, idx) => {
-            if(plannerSelectedAssets.has(idx)) {
+            if(plannerSelectedAssets.has(idx) && item.type !== 'raw') {
                 selectedCount++;
                 let miles = item.type === 'transfer' ? Math.trunc(item.current * (item.unitMiles/item.unitPoints)) + ((item.bonusReq > 0) ? Math.trunc(item.current / item.bonusReq) * (item.bonusGive || 0) : 0) : item.current;
 
@@ -1380,12 +1565,12 @@
 
                 assetHtml += `
                 <div class="planner-asset-status">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
+                    <div class="tdc-flex tdc-justify-between tdc-align-center tdc-mb-1">
                         <span class="fw-bold text-dark">${item.name} <small class="text-muted">(${miles.toLocaleString()} 哩)</small></span>
                         ${isEnough ? '<span class="badge bg-success">✅ 足夠</span>' : `<span class="badge bg-danger">❌ 缺 ${Math.abs(diff).toLocaleString()}</span>`}
                     </div>
-                    <div class="d-flex justify-content-between align-items-center mt-2">
-                        <div class="progress flex-grow-1 me-3" style="height: 6px;">
+                    <div class="tdc-flex tdc-justify-between tdc-align-center mt-2">
+                        <div class="progress tdc-grow-1 me-3" style="height: 6px;">
                             <div class="progress-bar ${isEnough ? 'bg-success' : 'bg-warning'}" style="width: ${Math.min(100, (Math.max(0, miles)/baseMiles)*100)}%"></div>
                         </div>
                         ${linkHtml}
@@ -1398,12 +1583,6 @@
         document.getElementById('planner-results-container').innerHTML = html + (selectedCount > 0 ? assetHtml : '');
     }
 
-    // 🛡️ v14.4 絕對防禦型 Markdown 解析器 (強制轉為字串)
-    const formatMD = (str) => {
-        let safeStr = str ? String(str) : '';
-        return safeStr.replace(/\*\*(.*?)\*\*/g, '<strong class="text-primary-dark">$1</strong>').replace(/\n/g, '<br>');
-    };
-
     async function startAIDiagnosis(mode) {
         const key = localStorage.getItem('GEMINI_API_KEY');
         const githubToken = localStorage.getItem('GITHUB_GIST_TOKEN');
@@ -1415,41 +1594,48 @@
         const modalTitle = document.getElementById('ai-modal-title');
 
         modalTitle.innerHTML = mode === 'global' ? '<svg class="me-2" style="width:20px;height:20px; color:#6d28d9;"><use href="#icon-sparkle"/></svg>全局資產價值指標 (戰略紫)' : '<svg class="me-2" style="width:20px;height:20px; color:#2563eb;"><use href="#icon-target"/></svg>指定航線達成方案 (精準藍)';
-        contentBox.innerHTML = '<div class="text-center py-5 text-muted"><div class="spinner-border text-primary mb-3"></div><br>正在連接 Gemini 大腦，執行實時政策審計與資產精算...</div>';
+        contentBox.innerHTML = '<div class="tdc-text-center py-5 text-muted"><div class="spinner-border text-primary tdc-mb-3"></div><br>正在連接 Gemini 大腦，執行轉點估值與極限航線兵推...</div>';
         reportModal.show();
 
         try {
             const db = loadDB();
-            let assetStr = db.warehouse.length === 0 ? '目前倉庫為空。' : db.warehouse.filter((_, idx) => plannerSelectedAssets.has(idx)).map(a => `- ${a.name}: ${a.current.toLocaleString()} (${a.targetAirline})`).join('\n');
+            let assetStr = db.warehouse.length === 0 ? '目前倉庫為空。' : db.warehouse.map((a, idx) => {
+                if(a.type === 'raw') return `- ${a.name}: ${a.current.toLocaleString()} 點 (類型: 通用積分 Raw, 無目標與比例)`;
+                if(plannerSelectedAssets.has(idx)) return `- ${a.name}: ${a.current.toLocaleString()} (目標: ${a.targetAirline}, 類型: ${a.type})`;
+                return '';
+            }).filter(Boolean).join('\n');
+            
             const fromStr = document.getElementById('planner-from').options[document.getElementById('planner-from').selectedIndex].text;
             const toStr = document.getElementById('planner-to').options[document.getElementById('planner-to').selectedIndex].text;
+            const clsStr = document.getElementById('planner-class').options[document.getElementById('planner-class').selectedIndex].text;
+            const isRtStr = document.getElementById('planner-trip-type').checked ? "來回" : "單程";
+            
             const activeCards = db.settings.enabledBuiltins.map(id => BUILTIN_DEFS.find(d=>d.id===id)?.name || id).concat(db.customCards.map(c=>c.name)).join(', ') || '無設定卡片';
             const currentYear = new Date().getFullYear();
 
-            // v14.5 AI Prompt 擴充：加入極限跨洲際航線的套利邏輯
             const engineLogic = mode === 'global' 
-                ? `【全局推薦模式】主動掃描以下資產，尋找全域 CPP 最高的航線（特別留意馬爾地夫、大洋洲或南美洲等高價值區域）。嚴禁提及無關航線的稅金規避。` 
-                : `【指定航線模式】鎖定從「${fromStr}」到「${toStr}」的目標。必須給出三種方案：1.基準直飛或常規轉機。2.極致聯盟套利(如寰宇一家距離表)。3.開口/外站銜接。`;
+                ? `尋找全域 CPP 最高的隱藏航線（特別留意馬爾地夫、大洋洲或南美洲）。` 
+                : `針對從「${fromStr}」到「${toStr}」(${isRtStr} ${clsStr})，給出至少三種兵推：(1)基本直飛 (2)低稅金/高CP聯盟路線 (3)開口/外站出發(含斷頭銜接建議)。`;
 
-            const systemPrompt = `[角色任務]: 你是一名深耕 ${currentYear} 年航空哩程領域的頂尖顧問，專精於動態改表與全球十大航區規劃。
+            const systemPrompt = `[角色任務]: 你是一名深耕 ${currentYear} 年航空哩程領域的頂尖顧問，專精於資產盤點、極限航區規劃與轉點套利。
 [背景資訊]:
-- 使用者欲動用的資產清單: \n${assetStr}
-- 使用者現有卡包清單: ${activeCards}
+- 欲動用的資產: \n${assetStr}
+- 現有主力卡包: ${activeCards}
+- 系統內建轉點白名單字典 (TRANSFER_DICT): ${JSON.stringify(TRANSFER_DICT)}
 [具體指令]:
-1. ${engineLogic}
-2. 第 L4 點必須結算「現有資產」與「目標消耗」差額。推薦後續刷卡策略時，【絕對只能】從「使用者現有卡包清單」中挑選，嚴禁推薦清單以外的卡片！
-[約束條件]: 絕對嚴格返回純 JSON 格式，禁止任何 Markdown 標記 (\`\`\`json 等)。
-排版強制規定：
-1. 所有 **消耗哩程**、**稅金金額**、**推薦卡片名稱** 必須使用 Markdown 粗體 (**文字**) 標註。
-2. 策略說明(desc)必須「條列式分點呈現」(如：1. xxx 2. xxx)，每一點不可超過 30 個字。
-3. 若使用者的資產有「負值(負債)」，必須在 L2 的第一點發出強烈警示並給予補強建議。
-
-輸出格式範例:
+1. 【區塊一：資產盤點與估值】：嚴格套用 TRANSFER_DICT 白名單推算哩程。若有「通用積分 (Raw)」，【絕對禁止】計入可用餘額，必須列為「待定義資產」並要求使用者至倉庫設定比例。
+2. 【區塊二：換票路線建議】：${engineLogic}
+3. 【區塊三：補血與刷卡攻略】：精算差額。若不足，【絕對只能】從「現有主力卡包」挑選最適合的卡，並明確指示需刷多少金額。
+[絕對約束條件]:
+- 推薦轉點時，【僅能】使用 TRANSFER_DICT 中 \`supported_partners\` 的夥伴，嚴禁捏造。
+- 絕對嚴格返回純 JSON 格式，禁止任何 Markdown 標記 (\`\`\`json 等)。
+- 所有 **消耗數量**、**稅金金額**、**卡片名稱** 須使用 Markdown 粗體 (**文字**) 標註。
+輸出格式:
 {
   "level1_status": "一句話評估資產實力 (32px 大字)",
   "level2_audit": [{"item": "規則項", "old": "舊比例", "new": "新比例", "status": "已核實"}],
-  "level3_routes": [{"title": "航線", "tags": ["#必經轉機:XX", "#地面區間", "哩程🟢", "稅金🟡"], "cost": "消耗數量", "tax": "NT$區間", "desc": "策略詳細說明 (含斷頭銜接法)"}],
-  "level4_decision": "後續刷卡與累積策略 (算出現有與目標的差距，且只能推薦使用者現有卡包內的卡片)",
+  "level3_routes": [{"title": "路線名稱", "tags": ["#標籤1", "#標籤2"], "cost": "消耗數量", "tax": "預估稅金", "desc": "條列式策略說明(每點<30字)"}],
+  "level4_decision": "缺口精算與明確刷卡指派",
   "patch_json": ${githubToken ? '"GITHUB_PATCH_CODE"' : 'null'}
 }`;
 
@@ -1458,18 +1644,11 @@
                 body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: systemPrompt }] }], generationConfig: { temperature: 0.2 } })
             });
 
-            if(!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                const code = errorData.error?.code || response.status;
-                const status = errorData.error?.status || response.statusText;
-                throw new Error(`${code} ${status}`);
-            }
-            
+            if(!response.ok) throw new Error(response.statusText);
             const data = await response.json();
             let aiText = data.candidates[0].content.parts[0].text;
             
-            const jsonStart = aiText.indexOf('{');
-            const jsonEnd = aiText.lastIndexOf('}');
+            const jsonStart = aiText.indexOf('{'); const jsonEnd = aiText.lastIndexOf('}');
             if (jsonStart !== -1 && jsonEnd !== -1) { aiText = aiText.substring(jsonStart, jsonEnd + 1); }
             const res = JSON.parse(aiText);
 
@@ -1483,40 +1662,41 @@
                 aiLinksHtml += `<a href="https://www.ana.co.jp/zh/tw/amc/reference/tukau/award/tk/terms.html" target="_blank" class="btn-airline-link px-3" style="border-color:#fde047; color:#854d0e; background:#fef9c3;">🌟 ANA 星盟</a>`;
             }
 
+            // [v14.9 修復 B] 補強 AI 陣列防呆，確保 .map() 不會因為缺失屬性而白屏
             contentBox.innerHTML = `
                 <div class="ai-level1-card mb-4 shadow-sm" style="${mode === 'global' ? 'background:#1e293b;' : 'background:#0f172a;'}">
-                    <div class="text-muted small mb-1">全局資產價值指標</div>
-                    <div class="fw-bold text-white" style="font-size: 1.3rem;">${formatMD(res.level1_status)}</div>
+                    <div class="text-muted small tdc-mb-1">全局資產價值指標</div>
+                    <div class="fw-bold text-white" style="font-size: 1.3rem;">${formatMD(res.level1_status || '資產評估完成')}</div>
                 </div>
                 
-                <h6 class="fw-bold mb-3" style="color:#6d28d9;">實時政策規章審計 (L2)</h6>
+                <h6 class="fw-bold tdc-mb-3" style="color:#6d28d9;">實時政策規章審計 (L2)</h6>
                 <div class="mb-4">
-                    ${res.level2_audit.map(a => `<div class="d-flex justify-content-between border-bottom py-2 small"><span>${formatMD(a.item)}</span><span><s class="text-danger">${formatMD(a.old)}</s> ➔ <span class="text-success fw-bold">${formatMD(a.new)}</span></span></div>`).join('')}
+                    ${(res.level2_audit || []).map(a => `<div class="tdc-flex tdc-justify-between border-bottom py-2 small"><span>${formatMD(a.item)}</span><span><s class="text-danger">${formatMD(a.old || '')}</s> <span class="text-success fw-bold">${formatMD(a.new)}</span></span></div>`).join('')}
                 </div>
 
-                <h6 class="fw-bold mb-3" style="color:#6d28d9;">優化提案與路徑指引 (L3)</h6>
+                <h6 class="fw-bold tdc-mb-3" style="color:#6d28d9;">優化提案與路徑指引 (L3)</h6>
                 <div class="mb-4">
-                    ${res.level3_routes.map(r => `
-                        <div class="card-box p-3 mb-3 border-0 shadow-sm" style="background:#f8fafc;">
-                            <div class="fw-bold fs-6 mb-2 text-dark">${formatMD(r.title)}</div>
-                            <div class="mb-2">${r.tags.map(t => `<span class="ai-tag ${t.includes('轉機')?'tag-hub':t.includes('地面')?'tag-ground':t.includes('哩程')?'tag-miles':'tag-tax'}">${formatMD(t)}</span>`).join('')}</div>
-                            <div class="d-flex justify-content-between small text-muted mb-2 pb-2 border-bottom fw-bold"><span>消耗: ${formatMD(r.cost)}</span><span>稅金: ${formatMD(r.tax)}</span></div>
+                    ${(res.level3_routes || []).map(r => `
+                        <div class="card-box p-3 tdc-mb-3 border-0 shadow-sm" style="background:#f8fafc;">
+                            <div class="fw-bold fs-6 tdc-mb-2 text-dark">${formatMD(r.title)}</div>
+                            <div class="tdc-mb-2">${(r.tags || []).map(t => `<span class="ai-tag ${t.includes('轉機')?'tag-hub':t.includes('地面')?'tag-ground':t.includes('哩程')?'tag-miles':'tag-tax'}">${formatMD(t)}</span>`).join('')}</div>
+                            <div class="tdc-flex tdc-justify-between small text-muted tdc-mb-2 pb-2 border-bottom fw-bold"><span>消耗: ${formatMD(r.cost)}</span><span>稅金: ${formatMD(r.tax)}</span></div>
                             <div class="small text-secondary mt-2" style="line-height:1.6;">${formatMD(r.desc)}</div>
                         </div>
                     `).join('')}
                 </div>
 
-                ${aiLinksHtml ? `<div class="mb-3"><div class="small fw-bold text-muted mb-2">⚡ 戰略快捷傳送門</div><div class="link-row">${aiLinksHtml}</div></div>` : ''}
+                ${aiLinksHtml ? `<div class="tdc-mb-3"><div class="small fw-bold text-muted tdc-mb-2">⚡ 戰略快捷傳送門</div><div class="link-row">${aiLinksHtml}</div></div>` : ''}
 
                 <div class="ai-level4-box shadow-sm mb-4">
-                    <div class="mb-2 text-warning fw-bold">戰略決策推演：後續補強攻略 (L4)</div>
-                    <div style="font-weight:normal; line-height: 1.6;">${formatMD(res.level4_decision)}</div>
+                    <div class="tdc-mb-2 text-warning fw-bold">戰略決策推演：後續補強攻略 (L4)</div>
+                    <div style="font-weight:normal; line-height: 1.6;">${formatMD(res.level4_decision || '建議查閱詳細規章')}</div>
                 </div>
                 
                 ${res.patch_json ? `<div class="mt-3"><label class="small text-danger fw-bold">維護者 JSON 補丁</label><div class="ai-json-patch">${res.patch_json}</div></div>` : ''}
             `;
         } catch (error) {
-            contentBox.innerHTML = `<div class="text-center py-5 text-danger fw-bold">⚠️ AI 診斷連線失敗。<br><small class="text-muted fw-normal mt-2 d-block">錯誤代碼: ${error.message}<br>請檢查金鑰與網路連線狀態。</small></div>`;
+            contentBox.innerHTML = `<div class="tdc-text-center py-5 text-danger fw-bold">⚠️ AI 診斷連線失敗。<br><small class="text-muted fw-normal mt-2 d-block">錯誤: ${error.message}<br>請檢查金鑰與網路連線狀態。</small></div>`;
         }
     }
 
@@ -1529,7 +1709,9 @@
         document.getElementById('nav-badge-list').innerText = pendingCount;
         document.getElementById('nav-badge-list').style.display = pendingCount > 0 ? 'inline-block' : 'none';
         
-        db.warehouse.forEach((_, idx) => plannerSelectedAssets.add(idx));
+        db.warehouse.forEach((item, idx) => {
+            if (item.type !== 'raw') plannerSelectedAssets.add(idx);
+        });
         
         switchPage('calc', document.querySelector('.nav-item'));
         triggerSync(); 
