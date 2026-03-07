@@ -1557,7 +1557,7 @@
         `;
         document.getElementById('planner-results-container').innerHTML = html;
     }
-    async function startAIDiagnosis(mode) {
+        async function startAIDiagnosis(mode) {
         const key = localStorage.getItem('GEMINI_API_KEY');
         if (!key) { const modal = new bootstrap.Modal(document.getElementById('aiIntroModal')); modal.show(); return; }
 
@@ -1617,21 +1617,25 @@
                 topupCandidates.push({ cardName: c.name, bestRate, bestScenario: bestScen, baseRate: Math.max(c.domRate, c.forRate), isUnlimitedLike: (!c.limitAmt || c.limitAmt === 0) });
             });
 
-            // 3. 組裝 AIPayload：目標參數 (僅指定模式)
+            // 3. 組裝 AIPayload：目標參數與出發地基地
+            const baseLocation = document.getElementById('planner-from').options[document.getElementById('planner-from').selectedIndex].text;
             let userTarget = null;
             if(mode === 'specific') {
                 userTarget = {
-                    from: document.getElementById('planner-from').options[document.getElementById('planner-from').selectedIndex].text,
+                    from: baseLocation,
                     to: document.getElementById('planner-to').options[document.getElementById('planner-to').selectedIndex].text,
                     cabinClass: document.getElementById('planner-class').options[document.getElementById('planner-class').selectedIndex].text,
                     tripType: document.getElementById('planner-trip-type').checked ? "來回" : "單程"
                 };
+            } else {
+                // 全局模式也強制帶入出發地，不讓 AI 亂飛
+                userTarget = { base_location: baseLocation };
             }
 
             const aiPayload = { assetSummary, normalizedAssets, blockedRawAssets, topupCandidates, userTarget };
             const currentYear = new Date().getFullYear();
 
-            // 4. 構建 System Prompt 與 JSON Schema
+            // 4. 構建 System Prompt 與 JSON Schema (嚴格規範 route_name)
             const globalSchema = `{
   "asset_strategy_review": {
     "overall_status": "String",
@@ -1640,7 +1644,7 @@
     "do_not_use_yet": [{"asset_name": "String", "reason": "String"}]
   },
   "top_ranked_destinations": [
-    {"rank": 1, "destination": "String", "feasibility_status": "String", "value_potential": "String", "est_tax_burden": "String", "topup_difficulty": "String", "final_verdict": "String", "sort_reason": "String"}
+    {"rank": 1, "route_name": "String (必須嚴格標示：起點-終點 / 艙等 / 單程或來回，例：台北-馬爾地夫 / 商務艙 / 來回)", "feasibility_status": "String", "value_potential": "String", "est_tax_burden": "String", "topup_difficulty": "String", "final_verdict": "String", "sort_reason": "String"}
   ],
   "not_recommended_routes": [{"destination": "String", "reason": "String"}],
   "contextual_note": "String (一句情境化提示，如近期貶值或機位狀態)"
@@ -1660,7 +1664,7 @@
 }`;
 
             const engineLogic = mode === 'global' 
-                ? `作為資深哩程玩家，評估資產組合並推薦 3 個最高 CPP 甜蜜點目的地。嚴格排序並給出戰略建議。若為新手(總哩程<1萬)，給出第一筆 10 萬哩建倉方向。` 
+                ? `作為資深哩程玩家，評估資產組合並推薦 3 個最高 CPP 甜蜜點目的地。推薦的航線必須以使用者的 base_location（${baseLocation}）為出發點。若是利用外站（如香港/新加坡出發）的亮點，必須在分析中明確說明這是一張外站出發票，並評估從 ${baseLocation} 過去的銜接難度。嚴格排序並給出戰略建議。` 
                 : `針對目標航線，提供 3 套具備實質差異的策略(直飛/聯盟套利/外站)。精算差額，並嚴格使用現有卡包推算補血算式。`;
 
             const systemPrompt = `[角色任務]: 你是一名深耕 ${currentYear} 年航空哩程領域的頂尖戰略顧問，負責分析使用者的真實資產並給出具備數學依據的決策報告。
@@ -1713,9 +1717,9 @@ ${mode === 'global' ? globalSchema : specificSchema}`;
                     <div class="mb-4">
                         ${(res.top_ranked_destinations || []).map(r => `
                             <div class="card-box p-3 tdc-mb-3 border border-primary border-opacity-25 shadow-sm" style="background:#f8fafc; border-radius:16px;">
-                                <div class="tdc-flex tdc-justify-between tdc-align-center tdc-mb-2">
-                                    <div class="fw-bold text-dark fs-6"><span class="badge bg-primary me-2">No.${r.rank || '-'}</span>${formatMD(r.destination)}</div>
-                                    <span class="badge ${String(r.feasibility_status).includes('已達成') ? 'bg-success' : 'bg-warning text-dark'}">${formatMD(r.feasibility_status)}</span>
+                                <div class="tdc-flex tdc-justify-between tdc-align-start tdc-mb-2">
+                                    <div class="fw-bold text-dark fs-6 pe-2" style="line-height:1.4;"><span class="badge bg-primary me-2">No.${r.rank || '-'}</span>${formatMD(r.route_name || r.destination)}</div>
+                                    <span class="badge ${String(r.feasibility_status).includes('已達成') ? 'bg-success' : 'bg-warning text-dark'} flex-shrink-0 mt-1">${formatMD(r.feasibility_status)}</span>
                                 </div>
                                 <div class="small text-secondary tdc-mb-2" style="line-height:1.6;">${formatMD(r.value_potential)}</div>
                                 <div class="tdc-flex flex-wrap gap-2 tdc-mb-2 border-top pt-2 mt-2">
