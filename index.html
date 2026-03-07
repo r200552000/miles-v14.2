@@ -661,7 +661,6 @@
         'taishin_cx': { target: '國泰航空', type: 'airline', ratio: 1, unitPoints:1, unitMiles:1 }
     };
 
-    // [v14.9 修復] 防幻覺轉點白名單字典 (修正型別一致性為 Array)
     const TRANSFER_DICT = {
         '匯豐旅人積分': {
             supported_partners: [
@@ -1096,7 +1095,7 @@
     };
 
     // ==========================================
-    // 4. 主計算邏輯與記帳系統 (UI 淨化版)
+    // 4. 主計算邏輯與記帳系統
     // ==========================================
     function calculate() {
         const db = loadDB(); const amt = parseFloat(document.getElementById('amount').value);
@@ -1189,7 +1188,6 @@
             const isWinner = idx === 0 && !c.isWarning; 
             const integrityColor = '#10b981'; 
             
-            // 介面淨化：保留實質成本，不擅加外部兌換連結
             let trueCostHtml = '';
             if (c.miles > 0) {
                 let trueCost = (c.twdSpend / c.miles).toFixed(2);
@@ -1218,7 +1216,6 @@
         });
     }
 
-    // [v14.9 修復 E] 寫入時補強 limitKey 與 createdAt，保持原有 Object 結構不變
     function recordTx(idx, isManual = false, originalMiles = 0) {
         const item = currentResults[idx]; const db = loadDB(); const now = new Date();
         const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
@@ -1232,7 +1229,7 @@
         if(isManual) kwNote += ` (微調: 原算 ${originalMiles})`;
         if(item.twdBase < 0) kwNote = `(退刷) ${kwNote}`;
 
-        const currentLimitKey = getLimitKey(db, item.id, now);
+        const limitKey = getLimitKey(db, item.id, now);
 
         db.records[monthKey][txId] = { 
             id: item.id, 
@@ -1243,12 +1240,12 @@
             unit: unitText, 
             note: kwNote,
             createdAt: Date.now(),
-            limitKey: currentLimitKey
+            limitKey: limitKey
         };
 
-        if(!db.limits[currentLimitKey]) db.limits[currentLimitKey] = { spend:0, points:0 };
+        if(!db.limits[limitKey]) db.limits[limitKey] = { spend:0, points:0 };
         let qToConsume = item.consumedQuota !== undefined ? item.consumedQuota : item.twdBase;
-        if(qToConsume !== 0) { db.limits[currentLimitKey].spend += qToConsume; }
+        if(qToConsume !== 0) { db.limits[limitKey].spend += qToConsume; }
         
         saveDB(db); 
         document.getElementById('nav-badge-list').innerText = Object.keys(db.records[monthKey]).length;
@@ -1267,13 +1264,19 @@
         const item = currentResults[idx]; const originalMiles = item.miles; item.miles = manualVal;
         bootstrap.Modal.getInstance(document.getElementById('manualAdjustModal')).hide(); recordTx(idx, true, originalMiles);
     }
+
     // ==========================================
-    // 5. 總帳、編輯額度與明細管理 (v14.9 修復版)
+    // 5. 總帳、編輯額度與明細管理 (含防空洞保護)
     // ==========================================
     function renderStatus() {
         const db = loadDB(); const now = new Date(); const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
         const data = db.records[monthKey] || {}; const agg = {};
-        for(let key in data) { const r = data[key]; if(!agg[r.id]) agg[r.id] = { name: r.name, spend: 0, miles: 0, unit: r.unit }; agg[r.id].spend += r.spend; agg[r.id].miles += r.miles; }
+        for(let key in data) { 
+            const r = data[key]; 
+            if(!r) continue; // 防空洞保護
+            if(!agg[r.id]) agg[r.id] = { name: r.name, spend: 0, miles: 0, unit: r.unit }; 
+            agg[r.id].spend += r.spend; agg[r.id].miles += r.miles; 
+        }
         
         const statusCon = document.getElementById('status-container'); if(!statusCon) return;
         if(Object.keys(agg).length === 0) statusCon.innerHTML = '<div class="tdc-text-center py-3 text-muted font-hand fw-bold">本月尚無累積</div>';
@@ -1332,7 +1335,12 @@
         const db = loadDB(); const now = new Date(); const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
         const data = db.records[monthKey] || {}; const con = document.getElementById('transaction-list-container'); con.innerHTML = '';
         const groups = {}; let count = 0;
-        for(let key in data) { const r = data[key]; if(!groups[r.name]) groups[r.name] = []; groups[r.name].push({ ...r, key }); count++; }
+        for(let key in data) { 
+            const r = data[key]; 
+            if(!r) continue; // 防空洞保護
+            if(!groups[r.name]) groups[r.name] = []; 
+            groups[r.name].push({ ...r, key }); count++; 
+        }
         
         document.getElementById('nav-badge-list').innerText = count; document.getElementById('nav-badge-list').style.display = count > 0 ? 'inline-block' : 'none';
         document.getElementById('pending-count').innerText = `${count} 筆`;
@@ -1366,17 +1374,10 @@
         if(!confirm('確定要刪除這筆紀錄嗎？\n（同時會退還該卡片的累積額度）')) return;
         const db = loadDB(); const rec = db.records[monthKey] ? db.records[monthKey][txId] : null;
         if(rec) { 
-            // 若為舊資料無 limitKey，則以交易當時的 Timestamp 推算以作兼容
             const limitKey = rec.limitKey || getLimitKey(db, rec.id, new Date(parseInt(txId.split('_')[1] || Date.now()))); 
             let qToRestore = rec.consumedQuota !== undefined ? rec.consumedQuota : rec.spend;
-            
-            if(db.limits[limitKey]) { 
-                db.limits[limitKey].spend -= qToRestore; 
-                if(db.limits[limitKey].spend < 0) db.limits[limitKey].spend = 0; 
-            } 
-            
-            delete db.records[monthKey][txId]; 
-            saveDB(db); renderList(); renderStatus();
+            if(db.limits[limitKey]) { db.limits[limitKey].spend -= qToRestore; if(db.limits[limitKey].spend < 0) db.limits[limitKey].spend = 0; } 
+            delete db.records[monthKey][txId]; saveDB(db); renderList(); renderStatus();
         }
     }
 
@@ -1384,35 +1385,32 @@
         if(!confirm('⚠️ 確定要重置本期所有數據嗎？\n（這會將本月相關的額度全部退還）')) return;
         const db = loadDB(); const now = new Date(); const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
         if(db.records[monthKey]) {
-            // 嚴格遍歷當月物件以退還額度，確保不傷及其他月份與倉庫
             for(let txId in db.records[monthKey]) {
                 const rec = db.records[monthKey][txId];
+                if(!rec) continue;
                 const lKey = rec.limitKey || getLimitKey(db, rec.id, now);
                 let qToRestore = rec.consumedQuota !== undefined ? rec.consumedQuota : rec.spend;
-                if(db.limits[lKey]) { 
-                    db.limits[lKey].spend -= qToRestore; 
-                    if(db.limits[lKey].spend < 0) db.limits[lKey].spend = 0; 
-                }
+                if(db.limits[lKey]) { db.limits[lKey].spend -= qToRestore; if(db.limits[lKey].spend < 0) db.limits[lKey].spend = 0; }
             }
-            db.records[monthKey] = {}; 
-            saveDB(db); renderStatus(); renderList();
+            db.records[monthKey] = {}; saveDB(db); renderStatus(); renderList();
         }
     }
 
     function batchImport() {
-        if(!confirm('確定將本期明細全部存入倉庫？')) return;
+        if(!confirm('確定將明細全部存入倉庫？')) return;
         const db = loadDB(); const monthKey = `${new Date().getFullYear()}-${String(new Date().getMonth()+1).padStart(2,'0')}`;
         const data = db.records[monthKey]; if(!data) return;
-        
         for(let k in data) {
-            const r = data[k]; const rule = AUTO_ASSETS[r.id];
+            const r = data[k]; 
+            if(!r) continue;
+            const rule = AUTO_ASSETS[r.id];
             if(rule) {
                 let asset = db.warehouse.find(a => a.targetAirline === rule.target && a.type === rule.type);
                 if(!asset) { asset = { type: rule.type, targetAirline: rule.target, name: rule.target, current: 0, unitPoints:rule.unitPoints, unitMiles:rule.unitMiles, bonusReq:0, bonusGive:0 }; db.warehouse.push(asset); }
                 asset.current += r.miles;
             }
         }
-        db.records[monthKey] = {}; saveDB(db); renderStatus(); renderList(); renderWarehouse(); showCustomAlert('✅ 已全部入庫！當月明細已清空。');
+        db.records[monthKey] = {}; saveDB(db); renderStatus(); renderList(); renderWarehouse(); showCustomAlert('✅ 已全部入庫！');
     }
 
     function confirmEditLimit() {
@@ -1524,9 +1522,6 @@
     
     function togglePlannerAsset(idx, isChecked) { if(isChecked) plannerSelectedAssets.add(idx); else plannerSelectedAssets.delete(idx); runPlannerCalc(); } 
 
-    // ==========================================
-    // 7. AI 雙引擎大腦 (v14.9 JSON 防呆版)
-    // ==========================================
     function togglePlannerTrip() {
         const isRt = document.getElementById('planner-trip-type').checked;
         document.getElementById('trip-label').innerText = isRt ? '來回 (Round-trip)' : '單程 (One-way)';
@@ -1562,10 +1557,8 @@
         `;
         document.getElementById('planner-results-container').innerHTML = html;
     }
-
     async function startAIDiagnosis(mode) {
         const key = localStorage.getItem('GEMINI_API_KEY');
-        const githubToken = localStorage.getItem('GITHUB_GIST_TOKEN');
         if (!key) { const modal = new bootstrap.Modal(document.getElementById('aiIntroModal')); modal.show(); return; }
 
         const reportModalEl = document.getElementById('aiReportModal');
@@ -1579,45 +1572,113 @@
 
         try {
             const db = loadDB();
-            let assetStr = db.warehouse.length === 0 ? '目前倉庫為空。' : db.warehouse.map((a, idx) => {
-                if(a.type === 'raw') return `- ${a.name}: ${a.current.toLocaleString()} 點 (類型: 通用積分 Raw, 無目標與比例)`;
-                if(plannerSelectedAssets.has(idx)) return `- ${a.name}: ${a.current.toLocaleString()} (目標: ${a.targetAirline}, 類型: ${a.type})`;
-                return '';
-            }).filter(Boolean).join('\n');
             
-            const fromStr = document.getElementById('planner-from').options[document.getElementById('planner-from').selectedIndex].text;
-            const toStr = document.getElementById('planner-to').options[document.getElementById('planner-to').selectedIndex].text;
-            const clsStr = document.getElementById('planner-class').options[document.getElementById('planner-class').selectedIndex].text;
-            const isRtStr = document.getElementById('planner-trip-type').checked ? "來回" : "單程";
-            
-            const activeCards = db.settings.enabledBuiltins.map(id => BUILTIN_DEFS.find(d=>d.id===id)?.name || id).concat(db.customCards.map(c=>c.name)).join(', ') || '無設定卡片';
+            // 1. 組裝 AIPayload：資產正規化與隔離
+            let totalEffectiveMiles = 0;
+            let totalRawPoints = 0;
+            const normalizedAssets = [];
+            const blockedRawAssets = [];
+
+            db.warehouse.forEach((item, idx) => {
+                if(!plannerSelectedAssets.has(idx)) return;
+                if(item.type === 'raw') {
+                    blockedRawAssets.push({ name: item.name, raw_points: item.current });
+                    totalRawPoints += item.current;
+                } else {
+                    let effMiles = item.type === 'transfer' ? Math.trunc(item.current * (item.unitMiles/item.unitPoints)) + ((item.bonusReq > 0) ? Math.trunc(item.current / item.bonusReq) * (item.bonusGive || 0) : 0) : item.current;
+                    totalEffectiveMiles += effMiles;
+                    let srcProg = item.name + (item.type === 'airline' ? ' (航空哩程)' : ' (可轉點信用卡/飯店積分)');
+                    normalizedAssets.push({ source_program: srcProg, type: item.type, effective_miles: effMiles, original_points: item.current });
+                }
+            });
+
+            const assetSummary = {
+                totalEffectiveMiles,
+                totalRawPoints,
+                isNewbie: totalEffectiveMiles < 10000,
+                hasDebt: totalEffectiveMiles < 0
+            };
+
+            // 2. 組裝 AIPayload：萃取動態卡包最優費率 (防幻覺鐵律)
+            const topupCandidates = [];
+            db.settings.enabledBuiltins.forEach(id => {
+                let bestRate = 20, bestScen = "一般消費", baseRate = 20, isUnl = false;
+                if(id==='taishin_cx') { bestRate=5; bestScen="越飛有哩/國泰官網"; baseRate=22; isUnl=false; }
+                else if(id==='hsbc_live') { bestRate=17; bestScen="亞洲七國/精選加碼"; baseRate=34; isUnl=false; }
+                else if(id==='ctbc_ci_inf') { bestRate=6.6; bestScen="生日海外實體"; baseRate=20; isUnl=false; }
+                else if(id==='hsbc_inf') { bestRate=10; bestScen="海外/指定機票"; baseRate=18; isUnl=true; }
+                else if(id==='ctbc_ci') { bestRate=6; bestScen="生日海外實體"; baseRate=18; isUnl=false; }
+                let name = BUILTIN_DEFS.find(d=>d.id===id)?.name || id;
+                topupCandidates.push({ cardName: name, bestRate, bestScenario: bestScen, baseRate, isUnlimitedLike: isUnl });
+            });
+            db.customCards.forEach(c => {
+                let bestRate = Math.min(c.domRate, c.forRate);
+                let bestScen = c.domRate < c.forRate ? "國內消費" : "海外消費";
+                topupCandidates.push({ cardName: c.name, bestRate, bestScenario: bestScen, baseRate: Math.max(c.domRate, c.forRate), isUnlimitedLike: (!c.limitAmt || c.limitAmt === 0) });
+            });
+
+            // 3. 組裝 AIPayload：目標參數 (僅指定模式)
+            let userTarget = null;
+            if(mode === 'specific') {
+                userTarget = {
+                    from: document.getElementById('planner-from').options[document.getElementById('planner-from').selectedIndex].text,
+                    to: document.getElementById('planner-to').options[document.getElementById('planner-to').selectedIndex].text,
+                    cabinClass: document.getElementById('planner-class').options[document.getElementById('planner-class').selectedIndex].text,
+                    tripType: document.getElementById('planner-trip-type').checked ? "來回" : "單程"
+                };
+            }
+
+            const aiPayload = { assetSummary, normalizedAssets, blockedRawAssets, topupCandidates, userTarget };
             const currentYear = new Date().getFullYear();
 
-            const engineLogic = mode === 'global' 
-                ? `尋找全域 CPP 最高的隱藏航線（特別留意馬爾地夫、大洋洲或南美洲）。` 
-                : `針對從「${fromStr}」到「${toStr}」(${isRtStr} ${clsStr})，給出至少三種兵推：(1)基本直飛 (2)低稅金/高CP聯盟路線 (3)開口/外站出發(含斷頭銜接建議)。`;
-
-            const systemPrompt = `[角色任務]: 你是一名深耕 ${currentYear} 年航空哩程領域的頂尖顧問，專精於資產盤點、極限航區規劃與轉點套利。
-[背景資訊]:
-- 欲動用的資產: \n${assetStr}
-- 現有主力卡包: ${activeCards}
-- 系統內建轉點白名單字典 (TRANSFER_DICT): ${JSON.stringify(TRANSFER_DICT)}
-[具體指令]:
-1. 【區塊一：資產盤點與估值】：嚴格套用 TRANSFER_DICT 白名單推算哩程。若有「通用積分 (Raw)」，【絕對禁止】計入可用餘額，必須列為「待定義資產」並要求使用者至倉庫設定比例。
-2. 【區塊二：換票路線建議】：${engineLogic}
-3. 【區塊三：補血與刷卡攻略】：精算差額。若不足，【絕對只能】從「現有主力卡包」挑選最適合的卡，並明確指示需刷多少金額。
-[絕對約束條件]:
-- 推薦轉點時，【僅能】使用 TRANSFER_DICT 中 \`supported_partners\` 的夥伴，嚴禁捏造。
-- 絕對嚴格返回純 JSON 格式，禁止任何 Markdown 標記 (\`\`\`json 等)。
-- 所有 **消耗數量**、**稅金金額**、**卡片名稱** 須使用 Markdown 粗體 (**文字**) 標註。
-輸出格式:
-{
-  "block1_assets": [{"name": "資產名稱與總和", "desc": "估值與隔離說明"}],
-  "block2_routes": [{"title": "路線名稱", "tags": ["#標籤1", "#標籤2"], "cost": "消耗數量", "tax": "預估稅金", "desc": "條列式策略說明(每點<30字)"}],
-  "block3_strategy": "缺口精算與明確刷卡指派",
-  "patch_json": ${githubToken ? '"GITHUB_PATCH_CODE"' : 'null'}
+            // 4. 構建 System Prompt 與 JSON Schema
+            const globalSchema = `{
+  "asset_strategy_review": {
+    "overall_status": "String",
+    "priority_use": [{"asset_name": "String", "reason": "String"}],
+    "keep_in_reserve": [{"asset_name": "String", "reason": "String"}],
+    "do_not_use_yet": [{"asset_name": "String", "reason": "String"}]
+  },
+  "top_ranked_destinations": [
+    {"rank": 1, "destination": "String", "feasibility_status": "String", "value_potential": "String", "est_tax_burden": "String", "topup_difficulty": "String", "final_verdict": "String", "sort_reason": "String"}
+  ],
+  "not_recommended_routes": [{"destination": "String", "reason": "String"}],
+  "contextual_note": "String (一句情境化提示，如近期貶值或機位狀態)"
 }`;
 
+            const specificSchema = `{
+  "feasibility": {
+    "is_achievable": true, "target_est_miles": 0, "current_effective_miles": 0, "shortfall": 0
+  },
+  "three_distinct_strategies": [
+    {"strategy_type": "直飛基準 | 聯盟高CP | 外站開口", "differentiation_tags": ["String"], "route_details": "String", "est_miles_cost": 0, "est_tax_range": "String", "pros_cons": ["String"]}
+  ],
+  "topup_recommendations": [
+    {"topup_type": "最省成本方案 | 最快達成方案", "recommended_card": "String", "trigger_scenario": "String", "math_formula": "String (缺口X哩 * Y元/哩 = Z元)", "required_spend_twd": 0}
+  ],
+  "contextual_note": "String (一句情境化提示)"
+}`;
+
+            const engineLogic = mode === 'global' 
+                ? `作為資深哩程玩家，評估資產組合並推薦 3 個最高 CPP 甜蜜點目的地。嚴格排序並給出戰略建議。若為新手(總哩程<1萬)，給出第一筆 10 萬哩建倉方向。` 
+                : `針對目標航線，提供 3 套具備實質差異的策略(直飛/聯盟套利/外站)。精算差額，並嚴格使用現有卡包推算補血算式。`;
+
+            const systemPrompt = `[角色任務]: 你是一名深耕 ${currentYear} 年航空哩程領域的頂尖戰略顧問，負責分析使用者的真實資產並給出具備數學依據的決策報告。
+[鐵律]:
+1. 計算補血金額時【必須且只能】依據我提供的 \`topupCandidates\` 內的 \`bestRate\`。
+2. 補血算式必須包含：(目標 - 現有 = 缺口) -> 缺口 * 卡片bestRate = 應刷金額。
+3. \`blockedRawAssets\` 是無法轉換的點數，絕對不可計入 \`totalEffectiveMiles\` 計算。
+4. 絕對嚴格返回純 JSON 格式，禁止任何 Markdown 標記 (\`\`\`json 等)。
+
+[輸入資料 Payload]:
+${JSON.stringify(aiPayload)}
+
+[決策要求]: ${engineLogic}
+
+[強制輸出 JSON Schema]:
+${mode === 'global' ? globalSchema : specificSchema}`;
+
+            // 5. 呼叫 API
             const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: systemPrompt }] }], generationConfig: { temperature: 0.2 } })
@@ -1631,36 +1692,99 @@
             if (jsonStart !== -1 && jsonEnd !== -1) { aiText = aiText.substring(jsonStart, jsonEnd + 1); }
             const res = JSON.parse(aiText);
 
-            contentBox.innerHTML = `
-                <div class="p-3 tdc-mb-3 border-0 shadow-sm" style="background:#eff6ff; border-radius:16px; border-left: 4px solid #3b82f6 !important;">
-                    <h6 class="fw-bold tdc-mb-2" style="color:#2563eb;">區塊一：資產盤點與估值</h6>
-                    ${(res.block1_assets || []).map(a => `
-                        <div class="fw-bold text-dark tdc-mb-1" style="font-size:0.9rem;">${formatMD(a.name)}</div>
-                        <div class="small text-secondary tdc-mb-2" style="line-height:1.6;">${formatMD(a.desc)}</div>
-                    `).join('')}
-                </div>
+            // 6. UI 渲染：全面導入防呆鏈與樣式對照
+            const fixedDisclaimer = `<div class="mt-4 pt-3 border-top tdc-text-center"><small class="text-muted d-block" style="line-height: 1.5;">【系統聲明】您的卡片費率與現有哩程餘額為系統已知事實。<br>預估消耗、稅費及機位狀態為 AI 策略推估，請以實際開票當下之官方航司系統為準。<br><span class="text-primary-dark fw-bold">${formatMD(res.contextual_note || '')}</span></small></div>`;
 
-                <h6 class="fw-bold tdc-mb-2 px-1" style="color:#6d28d9;"><svg class="lucide me-1"><use href="#icon-plane"/></svg>區塊二：換票路線建議</h6>
-                <div class="mb-4">
-                    ${(res.block2_routes || []).map(r => `
-                        <div class="card-box p-3 tdc-mb-3 border-0 shadow-sm" style="background:#f8fafc; border-radius:16px;">
-                            <div class="fw-bold fs-6 tdc-mb-2 text-dark">${formatMD(r.title)}</div>
-                            <div class="tdc-mb-2">${(r.tags || []).map(t => `<span class="ai-tag ${t.includes('轉機')||t.includes('開口')?'tag-hub':t.includes('聯盟')?'tag-ground':t.includes('哩程')?'tag-miles':'tag-tax'}">${formatMD(t)}</span>`).join('')}</div>
-                            <div class="tdc-flex tdc-justify-between small text-muted tdc-mb-2 pb-2 border-bottom fw-bold"><span>消耗: ${formatMD(r.cost)}</span><span>稅金: ${formatMD(r.tax)}</span></div>
-                            <div class="small text-secondary mt-2" style="line-height:1.6;">${formatMD(r.desc)}</div>
+            if (mode === 'global') {
+                const asr = res.asset_strategy_review || {};
+                contentBox.innerHTML = `
+                    <div class="ai-level1-card mb-4 shadow-sm" style="background:#1e293b;">
+                        <div class="text-muted small tdc-mb-2">資產戰略總評</div>
+                        <div class="fw-bold text-white" style="font-size: 1.2rem; line-height: 1.4;">${formatMD(asr.overall_status || '資產評估完成')}</div>
+                    </div>
+                    
+                    <div class="tdc-mb-3">
+                        ${(asr.priority_use || []).map(a => `<div class="tdc-mb-1 p-2 bg-success text-success bg-opacity-10 border border-success border-opacity-25 rounded-3 small">✅ <b>優先動用：${formatMD(a.asset_name)}</b> - ${formatMD(a.reason)}</div>`).join('')}
+                        ${(asr.keep_in_reserve || []).map(a => `<div class="tdc-mb-1 p-2 bg-primary text-primary bg-opacity-10 border border-primary border-opacity-25 rounded-3 small">🛡️ <b>建議保留：${formatMD(a.asset_name)}</b> - ${formatMD(a.reason)}</div>`).join('')}
+                        ${(asr.do_not_use_yet || []).map(a => `<div class="p-2 bg-danger text-danger bg-opacity-10 border border-danger border-opacity-25 rounded-3 small">🚫 <b>暫不建議：${formatMD(a.asset_name)}</b> - ${formatMD(a.reason)}</div>`).join('')}
+                    </div>
+
+                    <h6 class="fw-bold tdc-mb-3 px-1 mt-4" style="color:#6d28d9;"><svg class="lucide me-1"><use href="#icon-target"/></svg>高價值候選目的地 Top 3</h6>
+                    <div class="mb-4">
+                        ${(res.top_ranked_destinations || []).map(r => `
+                            <div class="card-box p-3 tdc-mb-3 border border-primary border-opacity-25 shadow-sm" style="background:#f8fafc; border-radius:16px;">
+                                <div class="tdc-flex tdc-justify-between tdc-align-center tdc-mb-2">
+                                    <div class="fw-bold text-dark fs-6"><span class="badge bg-primary me-2">No.${r.rank || '-'}</span>${formatMD(r.destination)}</div>
+                                    <span class="badge ${String(r.feasibility_status).includes('已達成') ? 'bg-success' : 'bg-warning text-dark'}">${formatMD(r.feasibility_status)}</span>
+                                </div>
+                                <div class="small text-secondary tdc-mb-2" style="line-height:1.6;">${formatMD(r.value_potential)}</div>
+                                <div class="tdc-flex flex-wrap gap-2 tdc-mb-2 border-top pt-2 mt-2">
+                                    <span class="ai-tag tag-tax">稅費: ${formatMD(r.est_tax_burden)}</span>
+                                    <span class="ai-tag tag-hub">補血難度: ${formatMD(r.topup_difficulty)}</span>
+                                </div>
+                                <div class="small text-primary-dark fw-bold mt-1 bg-white p-2 rounded-3 border">✨ 結論：${formatMD(r.final_verdict)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    ${(res.not_recommended_routes && res.not_recommended_routes.length > 0) ? `
+                    <h6 class="fw-bold tdc-mb-2 px-1 mt-3 text-secondary"><svg class="lucide me-1"><use href="#icon-warn"/></svg>不推薦浪費清單</h6>
+                    <div class="bg-light border rounded-3 p-2 mb-3">
+                        ${res.not_recommended_routes.map(r => `<div class="small tdc-mb-1 text-muted">• <b class="text-dark">${formatMD(r.destination)}</b>: ${formatMD(r.reason)}</div>`).join('')}
+                    </div>` : ''}
+                    
+                    ${fixedDisclaimer}
+                `;
+            } else {
+                const fs = res.feasibility || {};
+                contentBox.innerHTML = `
+                    <div class="p-3 tdc-mb-3 border-0 shadow-sm" style="background:#f8fafc; border-radius:16px; border-left: 4px solid ${fs.is_achievable ? '#10b981' : '#f59e0b'} !important;">
+                        <div class="tdc-flex tdc-justify-between tdc-align-center tdc-mb-2">
+                            <h6 class="fw-bold tdc-m-0 text-dark">達成狀態判定</h6>
+                            <span class="badge ${fs.is_achievable ? 'bg-success' : 'bg-warning text-dark'} px-3">${fs.is_achievable ? '✅ 資源足夠' : '⚠️ 尚有缺口'}</span>
                         </div>
-                    `).join('')}
-                </div>
+                        <div class="progress tdc-mb-2" style="height: 8px;">
+                            <div class="progress-bar ${fs.is_achievable ? 'bg-success' : 'bg-warning'}" style="width: ${Math.min(100, ((fs.current_effective_miles || 0)/(fs.target_est_miles || 1))*100)}%"></div>
+                        </div>
+                        <div class="tdc-flex tdc-justify-between small fw-bold text-muted">
+                            <span>預估目標: ${Number(fs.target_est_miles).toLocaleString()}</span>
+                            <span class="${fs.is_achievable ? 'text-success' : 'text-danger'}">${fs.is_achievable ? '火力充足' : `缺口: ${Number(fs.shortfall).toLocaleString()} 哩`}</span>
+                        </div>
+                    </div>
 
-                <div class="ai-level4-box shadow-sm mb-4">
-                    <div class="tdc-mb-2 text-warning fw-bold tdc-flex tdc-align-center" style="color:#b45309;"><svg class="lucide me-2"><use href="#icon-calc"/></svg>區塊三：補血與刷卡攻略</div>
-                    <div style="font-weight:normal; line-height: 1.6; color:#334155;">${formatMD(res.block3_strategy)}</div>
-                </div>
-                
-                ${res.patch_json ? `<div class="mt-3"><label class="small text-danger fw-bold">維護者 JSON 補丁</label><div class="ai-json-patch">${res.patch_json}</div></div>` : ''}
-            `;
+                    <h6 class="fw-bold tdc-mb-3 px-1 mt-4" style="color:#2563eb;"><svg class="lucide me-1"><use href="#icon-map"/></svg>差異化執行劇本比較</h6>
+                    <div class="mb-4">
+                        ${(res.three_distinct_strategies || []).map(s => `
+                            <div class="card-box p-3 tdc-mb-3 border-0 shadow-sm" style="background:#ffffff; border: 1px solid #e2e8f0; border-radius:16px;">
+                                <div class="fw-bold fs-6 tdc-mb-2 text-primary-dark">${formatMD(s.strategy_type)}</div>
+                                <div class="tdc-mb-2">${(s.differentiation_tags || []).map(t => `<span class="ai-tag tag-miles bg-light text-secondary border-secondary">${formatMD(t)}</span>`).join('')}</div>
+                                <div class="small text-dark fw-bold tdc-mb-2 pb-2 border-bottom">${formatMD(s.route_details)}</div>
+                                <div class="tdc-flex tdc-justify-between small text-muted tdc-mb-2 fw-bold"><span>消耗: ${Number(s.est_miles_cost).toLocaleString()}</span><span>稅金: ${formatMD(s.est_tax_range)}</span></div>
+                                <ul class="small text-secondary m-0 ps-3" style="line-height:1.6;">
+                                    ${(s.pros_cons || []).map(pc => `<li>${formatMD(pc)}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    ${(!fs.is_achievable && res.topup_recommendations && res.topup_recommendations.length > 0) ? `
+                    <div class="ai-level4-box shadow-sm mb-4 bg-warning bg-opacity-10 border-warning">
+                        <div class="tdc-mb-3 text-warning fw-bold tdc-flex tdc-align-center" style="color:#b45309;"><svg class="lucide me-2"><use href="#icon-calc"/></svg>精確補血指派</div>
+                        ${res.topup_recommendations.map(t => `
+                            <div class="bg-white p-3 rounded-3 border tdc-mb-2">
+                                <div class="fw-bold text-dark tdc-mb-1">${formatMD(t.topup_type)}：使用 ${formatMD(t.recommended_card)}</div>
+                                <div class="small text-muted tdc-mb-2">觸發情境：${formatMD(t.trigger_scenario)}</div>
+                                <div class="ai-json-patch text-success border border-success bg-success bg-opacity-10 tdc-mb-2">${formatMD(t.math_formula)}</div>
+                                <div class="tdc-text-end fw-bold text-danger fs-5">應刷 NT$ ${Number(t.required_spend_twd).toLocaleString()}</div>
+                            </div>
+                        `).join('')}
+                    </div>` : ''}
+                    
+                    ${fixedDisclaimer}
+                `;
+            }
         } catch (error) {
-            contentBox.innerHTML = `<div class="tdc-text-center py-5 text-danger fw-bold">⚠️ AI 診斷連線失敗。<br><small class="text-muted fw-normal mt-2 d-block">錯誤: ${error.message}<br>請檢查金鑰與網路連線狀態，或回傳格式異常。</small></div>`;
+            contentBox.innerHTML = `<div class="tdc-text-center py-5 text-danger fw-bold">⚠️ AI 診斷連線失敗。<br><small class="text-muted fw-normal mt-2 d-block">錯誤: ${error.message}<br>請檢查金鑰狀態，或 AI 回傳格式發生異常。</small></div>`;
         }
     }
 
